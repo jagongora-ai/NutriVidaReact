@@ -1,12 +1,13 @@
-type Props = {
-  nombre : string;
-  onClick: () => void;
+type botonProps = {
+    nombre: string;
+    onClick?: () => void;
+    // ? lo hace opcional (no es necesario que siempre lo acepte)
 }
 
-function Boton({ nombre, onClick }: Props) {
+function Boton({ nombre, onClick }: botonProps) {
 
     return (
-        <button onClick={onClick}>
+        <button onClick={onClick} className="btn btn-primary, BotonLoginFormulario">
             {nombre}
         </button>
     )
