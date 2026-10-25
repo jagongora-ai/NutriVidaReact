@@ -1,5 +1,5 @@
 // Pie de página 
-export default function PiePagina() {
+function PiePagina() {
     return (<footer className="site-footer">
       <div className="container footer-content">
         <div>
@@ -14,3 +14,4 @@ export default function PiePagina() {
       </div>
     </footer>);
 }
+export default PiePagina;
