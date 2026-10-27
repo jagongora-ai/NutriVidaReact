@@ -6,12 +6,9 @@ import PiePagina from './components/organisms/PiePagina';
 import Profesionales, { profesionalesIniciales } from './pages/Profesionales';
 import DetalleProfesional from './pages/DetalleProfesional';
 import Inicio from './pages/Inicio';
-
-
-
+import RegistroLogin from './pages/RegistroLogin'
 
 function App() {
-
 
     return (
         <div className="app-shell">
@@ -32,8 +29,12 @@ function App() {
                         path="/profesionales/:id"
                         element={<DetalleProfesional profesionales={profesionalesIniciales} />}
                     />
-                    
 
+                    <Route
+                        path='/registro'
+                        element = {<RegistroLogin />}
+                    />
+                    
                 </Routes>
             </main>
 
@@ -41,5 +42,4 @@ function App() {
         </div>
     );
 }
-
 export default App;
