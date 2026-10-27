@@ -1,16 +1,15 @@
-type Props = {
-  nombre : string;
-  onClick: () => void;
+type botonProps = {
+    nombre: string;
+    onClick?: () => void;
+    
 }
 
-function Boton({ nombre, onClick }: Props) {
-
+function Boton({ nombre, onClick }: botonProps) {
     return (
-        <button onClick={onClick}>
+        <button onClick={onClick} className="btn btn-primary">
             {nombre}
         </button>
     )
-
 }
 
 export default Boton
