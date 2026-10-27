@@ -4,8 +4,8 @@ type camposProps = {
     etiqueta: string
     tipo: string
     nombre: string
-    valor: string
-    alCambiar: (valor: string) => void
+    valor?: string
+    alCambiar?: (valor: string) => void
 }
 
 function CampoRegistro({ etiqueta, tipo, nombre, valor, alCambiar }: camposProps) {
