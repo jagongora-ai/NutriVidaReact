@@ -1,12 +1,18 @@
 
+import SessionesDestacadas from '../components/molecules/SessioneDestacadas';
 import Carrusel from '../components/organisms/Carrusel';
 
-// Muestra el carrusel y los accesos principales del sitio.
 function Inicio() {
-    return (<div className="container home-page">
+  return (
+    <div className="container home-page">
+      <SessionesDestacadas
+        texto='Tu salud fisica nos importa'
+        subtitulo='¡¡ Navege por nuestra web !!'
+      />
       <Carrusel />
+    </div>
 
-    </div>);
+  );
 }
 
 export default Inicio;

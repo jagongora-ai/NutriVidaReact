@@ -5,13 +5,11 @@ type botonProps = {
 }
 
 function Boton({ nombre, onClick }: botonProps) {
-
     return (
-        <button onClick={onClick} className="btn btn-primary, BotonLoginFormulario">
+        <button onClick={onClick} className="btn btn-primary">
             {nombre}
         </button>
     )
-
 }
 
 export default Boton

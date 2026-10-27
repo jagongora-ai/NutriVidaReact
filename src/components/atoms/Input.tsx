@@ -12,5 +12,4 @@ function Input({ nombre, tipo, valor, alCambiar }: inputProps) {
             className="form-control" />
     )
 }
-
 export default Input;
