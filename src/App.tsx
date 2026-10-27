@@ -7,6 +7,8 @@ import Profesionales, { profesionalesIniciales } from './pages/Profesionales';
 import DetalleProfesional from './pages/DetalleProfesional';
 import Inicio from './pages/Inicio';
 import RegistroLogin from './pages/RegistroLogin'
+import AreaInicioSesion from './components/organisms/AreaInicioSesion';
+import InicioSesion from './pages/InicioSesion';
 
 function App() {
 
@@ -33,6 +35,11 @@ function App() {
                     <Route
                         path='/registro'
                         element = {<RegistroLogin />}
+                    />
+
+                    <Route
+                        path='/inicioSesion'
+                        element = {<InicioSesion/>}
                     />
                     
                 </Routes>
