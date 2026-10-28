@@ -12,6 +12,7 @@ function FormularioRegistroLogin() {
                 etiqueta="Nombre completo"
                 tipo="text"
                 nombre="nombre"
+                
             />
 
             <CampoRegistro
