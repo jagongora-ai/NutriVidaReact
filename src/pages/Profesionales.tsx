@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Input from '../components/atoms/Input';
-import Boton from '../components/atoms/Boton';
 import TituloPagina from '../components/molecules/TituloPagina';
 
 
@@ -83,8 +82,14 @@ function Profesionales({ profesionales }: {
                 <h2>{profesional.nombre}</h2>
                 <p>{profesional.especialidad}</p>
                 <div className="card-actions">
-                  <Link className="btn btn-outline-primary" to={`/profesionales/${profesional.id}`}>Ver perfil</Link>
-                  <Boton nombre="Iniciar sesión"/>
+
+                  <Link className="btn btn-outline-primary" to={`/profesionales/${profesional.id}`}>
+                  Ver perfil
+                  </Link>
+
+                  <Link className="btn btn-primary" to="/inicioSesion">
+                  Iniciar sesión
+                  </Link>
                 </div>
               </div>
             </article>
