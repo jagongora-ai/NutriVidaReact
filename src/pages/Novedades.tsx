@@ -35,21 +35,21 @@ function Novedades() {
                 descripcion="Información complementaria para tu bienestar nutricional."
             />
             <div className="row g-4 justify-content-center">
-                {novedades.map((novedad) => (
-                    <div className="col-12 col-md-6 col-lg-5" key={novedad.id}>
-                        
-                        <article className="article-card">
-                            <img src={novedad.imagen} alt={novedad.titulo} />
-                            <div className="d-flex h-100 flex-column">
-                                <h2 className="text-center">{novedad.titulo}</h2>
-                                <p className="text-center flex-grow-1">{novedad.resumen}</p>
-                                <Link className="btn btn-primary w-100" to={`/novedades/${novedad.id}`}>
-                                    Ver más
-                                </Link>
-                            </div>
-                        </article>
-                    </div>
-                ))}
+                {
+                    novedades.map((novedad) => (
+                        <div className="col-12 col-md-6 col-lg-5" key={novedad.id}>
+                            <article className="article-card">
+                                <img src={novedad.imagen} alt={novedad.titulo} />
+                                <div>
+                                    <h2 className="text-center">{novedad.titulo}</h2>
+                                    <p className="text-center flex-grow-1">{novedad.resumen}</p>
+                                    <Link className="btn btn-primary w-100 mt-auto" to={`/novedades/${novedad.id}`}>
+                                        Ver más
+                                    </Link>
+                                </div>
+                            </article>
+                        </div>
+                    ))}
             </div>
         </div>
     )
