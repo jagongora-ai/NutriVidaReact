@@ -1,5 +1,11 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 function NavbarAdministracion() {
+
+    const navegar = useNavigate()
+    const navegarInicioSesion = () => {
+        localStorage.removeItem("usuarioSesion")
+        navegar("/inicoSesion")
+    }
 
     return (
 
@@ -11,7 +17,13 @@ function NavbarAdministracion() {
                 </Link>
                 <div className="navbar-nav site-links">
                     <Link className='nav-link' to="/admin">Administracion</Link>
-                    <Link className='nav-link' to="/admin/cerrarSesion"> Cerrar Sesion </Link>
+                    <button
+                        className='nav-link'
+                        onClick={navegarInicioSesion}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                    >
+                        cerrarSesion
+                    </button>
                 </div>
             </nav>
         </header>);
