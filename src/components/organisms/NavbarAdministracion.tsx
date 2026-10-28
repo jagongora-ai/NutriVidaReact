@@ -11,6 +11,7 @@ function NavbarAdministracion() {
                 </Link>
                 <div className="navbar-nav site-links">
                     <Link className='nav-link' to="/admin">Administracion</Link>
+                    <Link className='nav-link' to="/admin/cerrarSesion"> Cerrar Sesion </Link>
                 </div>
             </nav>
         </header>);

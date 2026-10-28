@@ -21,6 +21,9 @@ function App() {
     const esAdministrador = ubicacion.pathname.startsWith("/admin")
 
 
+
+    
+
     const [pacientes, guardarPacientes] = useState<Patient[]>(() => {
         try {
             const pacientesGuardados = localStorage.getItem('pacientes');
@@ -91,8 +94,12 @@ function App() {
                         element={<InicioSesion />}
                     />
 
+                    {/*Rutas para admin*/}
                     <Route
                         path='/admin' element={<Admin />}
+                    />
+                    <Route
+                        path='/admin/cerrarSesion' element={<InicioSesion />}
                     />
 
                     <Route
