@@ -18,6 +18,7 @@ export type Professional = {
     areas: string[]
 }
 
+/* eslint-disable react-refresh/only-export-components */
 export const profesionalesIniciales: Professional[] = [
     {
         id: 1, nombre: 'Nut. Carolina Fuentes M.', especialidad: 'Especialista en Nutrición y Pérdida de Peso',
@@ -52,6 +53,7 @@ export const profesionalesIniciales: Professional[] = [
         areas: ['Nutrición deportiva', 'Rendimiento físico', 'Recuperación deportiva'],
     },
 ]
+
 
 function Profesionales({ profesionales }: {
     profesionales: Professional[]
