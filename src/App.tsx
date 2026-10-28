@@ -1,21 +1,29 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import Navbar from './components/organisms/Navbar';
 import PiePagina from './components/organisms/PiePagina';
-
 import Profesionales, { profesionalesIniciales } from './pages/Profesionales';
 import DetalleProfesional from './pages/DetalleProfesional';
 import Inicio from './pages/Inicio';
 import RegistroLogin from './pages/RegistroLogin'
-import AreaInicioSesion from './components/organisms/AreaInicioSesion';
 import InicioSesion from './pages/InicioSesion';
-import Pacientes, { DetallePaciente } from './pages/Pacientes';
+import Admin from './pages/Admin';
+import NavbarAdministracion from './components/organisms/NavbarAdministracion';
+
+
 
 function App() {
 
+    // lee la ubicacion
+    const ubicacion = useLocation()
+
+    //evalua si la ruta contiene ("path = /admin")
+    const esAdministrador = ubicacion.pathname.startsWith("/admin")
+
     return (
         <div className="app-shell">
-            <Navbar />
+
+            {esAdministrador ? <NavbarAdministracion /> : <Navbar />}
 
             <main className="main-content">
                 <Routes>
@@ -32,39 +40,26 @@ function App() {
                         path="/profesionales/:id"
                         element={<DetalleProfesional profesionales={profesionalesIniciales} />}
                     />
-                    <Route
-                        path="/pacientes"
-                        element={<Pacientes pacientes={pacientes} guardarPacientes={guardarPacientes} />}
-                    />
-
-                    <Route
-                        path="/pacientes/nuevo"
-                        element={<FormularioPaciente pacientes={pacientes} guardarPacientes={guardarPacientes} />}
-                    />
-
-                    <Route
-                        path="/pacientes/:id/editar"
-                        element={<FormularioPaciente pacientes={pacientes} guardarPacientes={guardarPacientes} />}
-                    />
-
-                    <Route
-                        path="/pacientes/:id"
-                        element={<DetallePaciente pacientes={pacientes} />}
-                    />
 
                     <Route
                         path='/registro'
-                        element = {<RegistroLogin />}
+                        element={<RegistroLogin />}
                     />
+
 
                     <Route
                         path='/inicioSesion'
-                        element = {<InicioSesion/>}
+                        element={<InicioSesion />}
                     />
-                    
+
+                    {/* Rutas administrativas */}
+                    <Route
+                        path='/admin'
+                        element={<Admin />}
+                    />
+
                 </Routes>
             </main>
-
             <PiePagina />
         </div>
     );
