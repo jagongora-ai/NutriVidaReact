@@ -11,6 +11,7 @@ import RegistroLogin from './pages/RegistroLogin'
 import InicioSesion from './pages/InicioSesion';
 import Pacientes, { DetallePaciente, FormularioPaciente, type Patient } from './pages/Pacientes';
 import Admin from './pages/Admin';
+import PanelMedico from './pages/PanelMedico';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
     const ubicacion = useLocation()
     //evalua si la ruta contiene ("path = /admin")
     const esAdministrador = ubicacion.pathname.startsWith("/admin")
+
 
     const [pacientes, guardarPacientes] = useState<Patient[]>(() => {
         try {
@@ -91,6 +93,11 @@ function App() {
 
                     <Route
                         path='/admin' element={<Admin />}
+                    />
+
+                    <Route
+                        path="/medico"
+                        element={<PanelMedico pacientes={pacientes} />}
                     />
 
                 </Routes>
