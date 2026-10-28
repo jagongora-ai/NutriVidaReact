@@ -11,6 +11,7 @@ import RegistroLogin from './pages/RegistroLogin'
 import InicioSesion from './pages/InicioSesion';
 import Pacientes, { DetallePaciente, FormularioPaciente, type Patient } from './pages/Pacientes';
 import Admin from './pages/Admin';
+import PanelMedico from './pages/PanelMedico';
 
 function App() {
 
@@ -99,6 +100,11 @@ function App() {
                     />
                     <Route
                         path='/admin/cerrarSesion' element={<InicioSesion />}
+                    />
+
+                    <Route
+                        path="/medico"
+                        element={<PanelMedico pacientes={pacientes} />}
                     />
 
                 </Routes>

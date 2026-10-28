@@ -20,6 +20,7 @@ function DetalleProfesional({ profesionales }: {
         <img src={profesional.imagen} alt={profesional.nombre}/>
         <div className="profile-copy">
           <span className="eyebrow">{profesional.ubicacion} · {profesional.atencion}</span>
+          
           <h2>{profesional.nombre}</h2>
           <h3>{profesional.especialidad}</h3>
           <p>{profesional.sobreMi}</p>
@@ -28,7 +29,11 @@ function DetalleProfesional({ profesionales }: {
           <ul>{profesional.estudios.map((estudio) => <li key={estudio}>{estudio}</li>)}</ul>
           <h4>Áreas de atención</h4>
           <div className="tag-list">{profesional.areas.map((area) => <span key={area}>{area}</span>)}</div>
-          <div className="mt-4"><Boton nombre="Iniciar sesión para agendar"/></div>
+          <div className="mt-4">
+            <Link className="btn btn-primary" to="/inicioSesion">
+            Iniciar sesión para agendar
+            </Link>
+          </div>
         </div>
       </article>
     </div>);
