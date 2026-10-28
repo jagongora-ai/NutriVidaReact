@@ -24,7 +24,9 @@ function DetalleNovedad() {
                 <TituloPagina titulo={novedad.titulo} descripcion={novedad.resumen} />
                 <p className="article-content">{novedad.contenidoCompleto}</p>
                 <div className="text-center">
-                    <Link className="btn btn-outline-secondary" to="/novedades">Volver a Novedades</Link>
+                    <Link className="btn btn-outline-secondary" to="/novedades">
+                    Volver a Novedades
+                    </Link>
                 </div>
             </article>
         </div>
