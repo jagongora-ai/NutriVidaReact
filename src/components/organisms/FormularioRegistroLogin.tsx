@@ -4,12 +4,16 @@ import BotonSecundario from "../atoms/BotonSecundario"
 import CampoRegistro from "../molecules/CampoRegistro"
 import ValidarRegistro from "../../validaciones/ValidarRegistroLogin"
 
-
 function FormularioRegistroLogin() {
+
+    const [nombre, setNombre] = useState("")
+    const [rut, setRut] = useState("")
+    const [edad, setEdad] = useState("")
+    const [correo, setCorreo] = useState("")
+    const [password, setPassword] = useState("")
 
     const manejarDatosRegistro = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
-
 
         const datosFormulario = {
             nombre,
@@ -38,14 +42,7 @@ function FormularioRegistroLogin() {
         alert("Usuario Registrado con exito!!")
     }
 
-    const [nombre, setNombre] = useState("")
-    const [rut, setRut] = useState("")
-    const [edad, setEdad] = useState("")
-    const [correo, setCorreo] = useState("")
-    const [password, setPassword] = useState("")
-
     return (
-
         <form className="form-check-label" onSubmit={manejarDatosRegistro} noValidate>
             <CampoRegistro
                 etiqueta="Nombre completo"
@@ -53,7 +50,6 @@ function FormularioRegistroLogin() {
                 nombre="nombre"
                 valor={nombre}
                 alCambiar={setNombre}
-
             />
 
             <CampoRegistro
@@ -96,8 +92,8 @@ function FormularioRegistroLogin() {
                     nombre="Limpiar campos"
                 />
             </div>
-
         </form>
     )
 }
+
 export default FormularioRegistroLogin
