@@ -20,7 +20,8 @@ function FormularioRegistroLogin() {
             rut,
             edad: Number(edad),
             correo,
-            password
+            password,
+            rol : "Cliente" as const
         };
 
         const esValido = ValidarRegistro(datosFormulario)
@@ -29,14 +30,10 @@ function FormularioRegistroLogin() {
             return;
         }
 
-        const usuarioNuevo = {
-            datosFormulario,
-            rol: "Cliente"
-        }
 
         const usuariosGuardados = localStorage.getItem("usuarios")
         const listarUsuarios = usuariosGuardados ? JSON.parse(usuariosGuardados) : []
-        listarUsuarios.push(usuarioNuevo)
+        listarUsuarios.push(datosFormulario)
 
         localStorage.setItem("usuarios", JSON.stringify(listarUsuarios))
         alert("Usuario Registrado con exito!!")
