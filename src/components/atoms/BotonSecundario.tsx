@@ -5,7 +5,7 @@ type BotonSecundarioProps = {
 
 function BotonSecundario({ nombre, onClick }: BotonSecundarioProps) {
     return (
-        <button onClick={onClick} className="btn btn-outline-primary">
+        <button type="button" onClick={onClick} className="btn btn-outline-primary">
             {nombre}
         </button>
     )

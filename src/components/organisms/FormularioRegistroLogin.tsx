@@ -42,6 +42,14 @@ function FormularioRegistroLogin() {
         alert("Usuario Registrado con exito!!")
     }
 
+    const limpiarCampos = () => {
+        setNombre("");
+        setRut("");
+        setEdad("");
+        setCorreo("");
+        setPassword("");
+    }
+
     return (
         <form className="form-check-label" onSubmit={manejarDatosRegistro} noValidate>
             <CampoRegistro
@@ -90,6 +98,7 @@ function FormularioRegistroLogin() {
                 />
                 <BotonSecundario
                     nombre="Limpiar campos"
+                    onClick={limpiarCampos}
                 />
             </div>
         </form>
