@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import { useState } from 'react';
 
 import Navbar from './components/organisms/Navbar';
 import PiePagina from './components/organisms/PiePagina';
@@ -9,9 +10,18 @@ import Inicio from './pages/Inicio';
 import RegistroLogin from './pages/RegistroLogin'
 import AreaInicioSesion from './components/organisms/AreaInicioSesion';
 import InicioSesion from './pages/InicioSesion';
-import Pacientes, { DetallePaciente } from './pages/Pacientes';
+import Pacientes, { DetallePaciente, FormularioPaciente, type Patient } from './pages/Pacientes';
 
 function App() {
+    const [pacientes, guardarPacientes] = useState<Patient[]>(() => {
+        try {
+            const pacientesGuardados = localStorage.getItem('pacientes');
+            return pacientesGuardados ? JSON.parse(pacientesGuardados) as Patient[] : [];
+        } catch {
+            window.alert('No se pudieron cargar los pacientes guardados.');
+            return [];
+        }
+    });    
 
     return (
         <div className="app-shell">
@@ -32,7 +42,7 @@ function App() {
                         path="/profesionales/:id"
                         element={<DetalleProfesional profesionales={profesionalesIniciales} />}
                     />
-                    <Route
+                   <Route
                         path="/pacientes"
                         element={<Pacientes pacientes={pacientes} guardarPacientes={guardarPacientes} />}
                     />

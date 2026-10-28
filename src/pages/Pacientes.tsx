@@ -1,9 +1,8 @@
-import { useState, type Dispatch, type SetStateAction } from 'react';
+import { useState, type Dispatch, type FormEvent, type SetStateAction } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import TituloPagina from '../components/molecules/TituloPagina';
-import campoRegistro from '../components/molecules/campoRegistro';
+import CampoRegistro from '../components/molecules/CampoRegistro';
 import { validarFichaPaciente, type DatosFichaPaciente } from '../validaciones/ValidarFichaPaciente';
-
 
 export type Patient = {
     id: number
@@ -28,7 +27,6 @@ export type Patient = {
     recomendaciones: string
 }
 
-
 function Pacientes({ pacientes, guardarPacientes }: {
     pacientes: Patient[]
     guardarPacientes: Dispatch<SetStateAction<Patient[]>>
@@ -37,6 +35,12 @@ function Pacientes({ pacientes, guardarPacientes }: {
         if (!window.confirm('¿Está seguro de que desea eliminar esta ficha?'))
             return;
         const actualizados = pacientes.filter((paciente) => paciente.id !== id);
+        try {
+            localStorage.setItem('pacientes', JSON.stringify(actualizados));
+        } catch {
+            window.alert('No se pudo eliminar la ficha. Inténtalo nuevamente.');
+            return;
+        }
         guardarPacientes(actualizados);
     }
     return (<div className="container page-space">
@@ -47,12 +51,12 @@ function Pacientes({ pacientes, guardarPacientes }: {
             : <div className="row g-3">{pacientes.map((paciente) => <div className="col-12" key={paciente.id}><article className="patient-card"><div><h2>{paciente.nombre || 'Sin nombre'}</h2><p><strong>RUT:</strong> {paciente.rut} · <strong>Edad:</strong> {paciente.edad} años</p><p className="mb-0"><strong>Alimentación:</strong> {paciente.alimentacion || 'No registrada'}</p></div><div className="patient-actions"><Link className="btn btn-primary" to={`/pacientes/${paciente.id}`}>Ver ficha</Link><Link className="btn btn-outline-primary" to={`/pacientes/${paciente.id}/editar`}>Editar</Link><button className="btn btn-outline-danger" onClick={() => eliminar(paciente.id)}>Eliminar</button></div></article></div>)}</div>}
     </div>);
 }
-const pacienteVacio = {
+const pacienteVacio: DatosFichaPaciente = {
     nombre: '', rut: '', edad: '', fechaNacimiento: '', telefono: '', correo: '',
     enfermedades: '', alergias: '', medicamentos: '', alimentacion: '', comidas: '',
     agua: '', actividad: '', peso: '', estatura: '', objetivo: '', observaciones: '', recomendaciones: '',
 };
-const camposTexto = [
+const camposTexto: { etiqueta: string; nombre: keyof DatosFichaPaciente; tipo: string }[] = [
     { etiqueta: 'Nombre completo', nombre: 'nombre', tipo: 'text' },
     { etiqueta: 'RUT', nombre: 'rut', tipo: 'text' },
     { etiqueta: 'Edad', nombre: 'edad', tipo: 'number' },
@@ -68,7 +72,7 @@ const camposTexto = [
     { etiqueta: 'Estatura (m)', nombre: 'estatura', tipo: 'number' },
 ];
 
-// Comparte el formulario para crear una ficha o modificar una existente.
+
 export function FormularioPaciente({ pacientes, guardarPacientes }: {
     pacientes: Patient[]
     guardarPacientes: Dispatch<SetStateAction<Patient[]>>
@@ -77,16 +81,19 @@ export function FormularioPaciente({ pacientes, guardarPacientes }: {
     const navegar = useNavigate();
     const pacienteActual = id ? pacientes.find((persona) => persona.id === Number(id)) : undefined;
     const [formulario, setFormulario] = useState<DatosFichaPaciente>(() => pacienteActual
-        ? Object.fromEntries(Object.keys(pacienteVacio).map((key) => [key, String(pacienteActual[key] ?? '')])) as DatosFichaPaciente
+        ? Object.fromEntries(Object.keys(pacienteVacio).map((key) => [
+            key,
+            String(pacienteActual[key as keyof Patient] ?? ''),
+        ])) as DatosFichaPaciente
         : pacienteVacio);
     const imc = formulario.peso && formulario.estatura && Number(formulario.estatura) > 0
         ? (Number(formulario.peso) / Number(formulario.estatura) ** 2).toFixed(2)
         : '';
     if (id && !pacienteActual)
         return <div className="container page-space"><div className="alert alert-warning">No encontramos la ficha solicitada.</div><Link to="/pacientes">Volver a pacientes</Link></div>;
-    function enviar(evento) {
+    function enviar(evento: FormEvent<HTMLFormElement>) {
         evento.preventDefault();
-        // Detiene el guardado y avisa con alert si la ficha tiene datos inválidos.
+    
         const errorValidacion = validarFichaPaciente(formulario);
         if (errorValidacion) {
             window.alert(errorValidacion);
@@ -105,6 +112,12 @@ export function FormularioPaciente({ pacientes, guardarPacientes }: {
         const lista = pacienteActual
             ? pacientes.map((persona) => persona.id === pacienteActual.id ? actualizado : persona)
             : [...pacientes, actualizado];
+        try {
+            localStorage.setItem('pacientes', JSON.stringify(lista));
+        } catch {
+            window.alert('No se pudo guardar la ficha. Inténtalo nuevamente.');
+            return;
+        }
         guardarPacientes(lista);
         navegar('/pacientes');
     }
@@ -112,11 +125,11 @@ export function FormularioPaciente({ pacientes, guardarPacientes }: {
       <TituloPagina titulo={pacienteActual ? 'Editar ficha del paciente' : 'Nueva ficha del paciente'} descripcion="Registra la información necesaria para un seguimiento nutricional integral."/>
       <form className="form-card patient-form" onSubmit={enviar} noValidate>
         <h2>Datos personales y antecedentes</h2>
-        <div className="row">{camposTexto.slice(0, 9).map((campo) => <div className="col-md-6" key={campo.nombre}><CampoFormulario etiqueta={campo.etiqueta} tipo={campo.tipo} nombre={campo.nombre} valor={formulario[campo.nombre]} alCambiar={(valor) => setFormulario({ ...formulario, [campo.nombre]: valor })}/></div>)}</div>
+        <div className="row">{camposTexto.slice(0, 9).map((campo) => <div className="col-md-6" key={campo.nombre}><CampoRegistro etiqueta={campo.etiqueta} tipo={campo.tipo} nombre={campo.nombre} valor={formulario[campo.nombre]} alCambiar={(valor) => setFormulario({ ...formulario, [campo.nombre]: valor })}/></div>)}</div>
         <h2 className="mt-4">Hábitos y evaluación</h2>
         <div className="row">
           <div className="col-md-6"><div className="mb-3"><label className="form-label" htmlFor="alimentacion">Tipo de alimentación</label><select className="form-select" id="alimentacion" required value={formulario.alimentacion} onChange={(event) => setFormulario({ ...formulario, alimentacion: event.target.value })}><option value="">Selecciona una opción</option><option>Omnívora</option><option>Vegetariana</option><option>Vegana</option><option>Otra</option></select></div></div>
-          {camposTexto.slice(9).map((campo) => <div className="col-md-6" key={campo.nombre}><CampoFormulario etiqueta={campo.etiqueta} tipo={campo.tipo} nombre={campo.nombre} valor={formulario[campo.nombre]} alCambiar={(valor) => setFormulario({ ...formulario, [campo.nombre]: valor })}/></div>)}
+          {camposTexto.slice(9).map((campo) => <div className="col-md-6" key={campo.nombre}><CampoRegistro etiqueta={campo.etiqueta} tipo={campo.tipo} nombre={campo.nombre} valor={formulario[campo.nombre]} alCambiar={(valor) => setFormulario({ ...formulario, [campo.nombre]: valor })}/></div>)}
           <div className="col-md-6"><div className="mb-3"><label className="form-label" htmlFor="actividad">Nivel de actividad física</label><select className="form-select" id="actividad" required value={formulario.actividad} onChange={(event) => setFormulario({ ...formulario, actividad: event.target.value })}><option value="">Selecciona una opción</option><option>Sedentaria</option><option>Leve</option><option>Moderada</option><option>Intensa</option></select></div></div>
           <div className="col-md-6"><div className="mb-3"><label className="form-label" htmlFor="imc">IMC calculado</label><input id="imc" name="imc" type="text" value={imc} readOnly className="form-control bg-light" placeholder="Se calcula con peso y estatura"/></div></div>
           <div className="col-md-6"><div className="mb-3"><label className="form-label" htmlFor="objetivo">Objetivo nutricional</label><textarea className="form-control" id="objetivo" rows={3} required value={formulario.objetivo} onChange={(event) => setFormulario({ ...formulario, objetivo: event.target.value })}/></div></div>
@@ -128,19 +141,20 @@ export function FormularioPaciente({ pacientes, guardarPacientes }: {
     </div>);
 }
 
-// Organiza los datos de una ficha para facilitar su lectura.
+
 export function DetallePaciente({ pacientes }: { pacientes: Patient[] }) {
     const { id } = useParams();
     const paciente = pacientes.find((persona) => persona.id === Number(id));
     if (!paciente)
         return <div className="container page-space"><div className="alert alert-warning">No encontramos la ficha solicitada.</div><Link to="/pacientes">Volver a pacientes</Link></div>;
-    const grupos: [string, (keyof Patient)[]][] = [
+    type ClaveDetalle = Exclude<keyof Patient, 'id' | 'nombre'>;
+    const grupos: [string, ClaveDetalle[]][] = [
         ['Datos personales', ['rut', 'edad', 'fechaNacimiento', 'telefono', 'correo']],
         ['Antecedentes de salud', ['enfermedades', 'alergias', 'medicamentos']],
         ['Hábitos y evaluación', ['alimentacion', 'comidas', 'agua', 'actividad', 'peso', 'estatura', 'imc']],
         ['Plan de atención', ['objetivo', 'observaciones', 'recomendaciones']],
     ];
-    const etiquetas = {
+    const etiquetas: Record<ClaveDetalle, string> = {
         rut: 'RUT', edad: 'Edad', fechaNacimiento: 'Fecha de nacimiento', telefono: 'Teléfono', correo: 'Correo',
         enfermedades: 'Enfermedades', alergias: 'Alergias', medicamentos: 'Medicamentos', alimentacion: 'Alimentación',
         comidas: 'Comidas al día', agua: 'Vasos de agua', actividad: 'Actividad física', peso: 'Peso (kg)',
