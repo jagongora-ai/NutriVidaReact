@@ -1,5 +1,4 @@
 import { Link, useParams } from 'react-router-dom';
-import Boton from '../components/atoms/Boton';
 import TituloPagina from '../components/molecules/TituloPagina';
 import type { Professional } from './Profesionales';
 

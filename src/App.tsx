@@ -12,6 +12,8 @@ import InicioSesion from './pages/InicioSesion';
 import Pacientes, { DetallePaciente, FormularioPaciente, type Patient } from './pages/Pacientes';
 import Admin from './pages/Admin';
 import PanelMedico from './pages/PanelMedico';
+import Novedades from './pages/Novedades';
+import DetalleNovedad from './pages/DetalleNovedad';
 
 function App() {
 
@@ -105,6 +107,16 @@ function App() {
                     <Route
                         path="/medico"
                         element={<PanelMedico pacientes={pacientes} />}
+                    />
+
+                    <Route
+                        path="/novedades"
+                        element={<Novedades />}
+                    />
+
+                    <Route
+                        path="/novedades/:id"
+                        element={<DetalleNovedad />}
                     />
 
                 </Routes>
