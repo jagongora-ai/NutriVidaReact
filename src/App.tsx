@@ -1,7 +1,8 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 
 import Navbar from './components/organisms/Navbar';
+import NavbarAdministracion from './components/organisms/NavbarAdministracion';
 import PiePagina from './components/organisms/PiePagina';
 import Profesionales, { profesionalesIniciales } from './pages/Profesionales';
 import DetalleProfesional from './pages/DetalleProfesional';
@@ -9,8 +10,14 @@ import Inicio from './pages/Inicio';
 import RegistroLogin from './pages/RegistroLogin'
 import InicioSesion from './pages/InicioSesion';
 import Pacientes, { DetallePaciente, FormularioPaciente, type Patient } from './pages/Pacientes';
+import Admin from './pages/Admin';
 
 function App() {
+
+    // lee la ubicacion
+    const ubicacion = useLocation()
+    //evalua si la ruta contiene ("path = /admin")
+    const esAdministrador = ubicacion.pathname.startsWith("/admin")
 
     const [pacientes, guardarPacientes] = useState<Patient[]>(() => {
         try {
@@ -33,15 +40,15 @@ function App() {
                         path="/"
                         element={<Inicio />}
                     />
-                    
+
                     <Route
                         path='/registro'
-                        element = {<RegistroLogin />}
+                        element={<RegistroLogin />}
                     />
 
                     <Route
                         path='/inicioSesion'
-                        element = {<InicioSesion/>}
+                        element={<InicioSesion />}
                     />
 
                     <Route
@@ -74,14 +81,18 @@ function App() {
 
                     <Route
                         path='/registro'
-                        element = {<RegistroLogin />}
+                        element={<RegistroLogin />}
                     />
 
                     <Route
                         path='/inicioSesion'
-                        element = {<InicioSesion/>}
+                        element={<InicioSesion />}
                     />
-                    
+
+                    <Route
+                        path='/admin' element={<Admin />}
+                    />
+
                 </Routes>
             </main>
             <PiePagina />
