@@ -376,18 +376,23 @@ a {
 }
 
 .article-card {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   overflow: hidden;
   border-radius: 14px;
 }
 
-.article-card>img {
+.article-card > img {
   width: 100%;
   height: 260px;
   object-fit: cover;
 }
 
-.article-card>div {
+.article-card > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   padding: 1.5rem;
 }
 
@@ -398,7 +403,7 @@ a {
 }
 
 .article-card p,
-.article-detail>p {
+.article-detail > p {
   margin-bottom: 1.25rem;
   line-height: 1.75;
 }
@@ -407,7 +412,7 @@ a {
   max-width: 850px;
 }
 
-.article-detail>img {
+.article-detail > img {
   display: block;
   width: 100%;
   max-height: 440px;
