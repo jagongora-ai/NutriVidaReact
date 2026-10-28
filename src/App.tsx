@@ -9,6 +9,7 @@ import Inicio from './pages/Inicio';
 import RegistroLogin from './pages/RegistroLogin'
 import AreaInicioSesion from './components/organisms/AreaInicioSesion';
 import InicioSesion from './pages/InicioSesion';
+import Pacientes, { DetallePaciente } from './pages/Pacientes';
 
 function App() {
 
@@ -30,6 +31,25 @@ function App() {
                     <Route
                         path="/profesionales/:id"
                         element={<DetalleProfesional profesionales={profesionalesIniciales} />}
+                    />
+                    <Route
+                        path="/pacientes"
+                        element={<Pacientes pacientes={pacientes} guardarPacientes={guardarPacientes} />}
+                    />
+
+                    <Route
+                        path="/pacientes/nuevo"
+                        element={<FormularioPaciente pacientes={pacientes} guardarPacientes={guardarPacientes} />}
+                    />
+
+                    <Route
+                        path="/pacientes/:id/editar"
+                        element={<FormularioPaciente pacientes={pacientes} guardarPacientes={guardarPacientes} />}
+                    />
+
+                    <Route
+                        path="/pacientes/:id"
+                        element={<DetallePaciente pacientes={pacientes} />}
                     />
 
                     <Route
