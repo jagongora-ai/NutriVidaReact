@@ -4,6 +4,7 @@ export interface DatosRegistroLogin {
     edad: number;
     correo: string;
     password: string;
+    rol: "Cliente";
 }
 
 function ValidarRegistro(datos: DatosRegistroLogin): Boolean {
