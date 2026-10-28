@@ -302,7 +302,13 @@ export function DetallePaciente({ pacientes }: { pacientes: Patient[] }) {
     const { id } = useParams();
     const paciente = pacientes.find((persona) => persona.id === Number(id));
     if (!paciente)
-        return <div className="container page-space"><div className="alert alert-warning">No encontramos la ficha solicitada.</div><Link to="/pacientes">Volver a pacientes</Link></div>;
+        return <div className="container page-space"><div className="alert alert-warning"
+        >No encontramos la ficha solicitada.
+        </div>
+            <Link to="/pacientes">
+                Volver a pacientes
+            </Link>
+        </div>;
     type ClaveDetalle = Exclude<keyof Patient, 'id' | 'nombre'>;
     const grupos: [string, ClaveDetalle[]][] = [
         ['Datos personales', ['rut', 'edad', 'fechaNacimiento', 'telefono', 'correo']],
@@ -318,8 +324,30 @@ export function DetallePaciente({ pacientes }: { pacientes: Patient[] }) {
     };
     return (<div className="container page-space">
         <TituloPagina titulo={paciente.nombre} descripcion="Ficha de seguimiento nutricional" />
-        <div className="d-flex justify-content-end gap-2 mb-4"><Link className="btn btn-outline-primary" to="/pacientes">Volver al listado</Link><Link className="btn btn-primary" to={`/pacientes/${paciente.id}/editar`}>Editar ficha</Link></div>
-        <div className="row g-4">{grupos.map(([grupo, claves]) => <div className="col-md-6" key={grupo}><section className="detail-card"><h2>{grupo}</h2><dl>{claves.map((clave) => <div className="detail-row" key={clave}><dt>{etiquetas[clave]}</dt><dd>{paciente[clave] || 'No registrado'}{clave === 'edad' ? ' años' : ''}{clave === 'imc' ? ' kg/m²' : ''}</dd></div>)}</dl></section></div>)}</div>
+        <div className="d-flex justify-content-end gap-2 mb-4">
+            <Link className="btn btn-outline-primary" to="/pacientes">
+                Volver al listado
+            </Link>
+            <Link className="btn btn-primary" to={`/pacientes/${paciente.id}/editar`}>
+                Editar ficha</Link></div>
+        <div className="row g-4">
+            {grupos.map(([grupo, claves]) =>
+                <div className="col-md-6" key={grupo}>
+                    <section className="detail-card">
+                        <h2>{grupo}</h2>
+                        <dl>{claves.map((clave) =>
+                            <div className="detail-row" key={clave}>
+                                <dt>{etiquetas[clave]}</dt>
+                                <dd>{paciente[clave] || 'No registrado'}
+                                    {clave === 'edad' ? ' años' : ''}
+                                    {clave === 'imc' ? ' kg/m²' : ''}
+                                </dd>
+                            </div>)}
+                        </dl>
+                    </section>
+                </div>
+            )}
+        </div>
     </div>);
 }
 
