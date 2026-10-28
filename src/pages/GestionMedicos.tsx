@@ -1,9 +1,14 @@
 import Titulos from "../components/atoms/Titulos"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { type Professional, profesionalesIniciales } from './Profesionales';
 import CardAdmin from "../components/molecules/CardAdmin";
+import EliminarMedico from "../validaciones/EliminarMedico";
 
 function GestionarMedicos() {
+
+    useEffect(() => {
+        localStorage.setItem("medicos", JSON.stringify(profesionalesIniciales))
+    }, [])
 
     const [medicos, setMedicos] = useState<Professional[]>(profesionalesIniciales)
 
@@ -17,7 +22,11 @@ function GestionarMedicos() {
                     <div key={medico.id} className="col-12 col-md-6 col-lg-4">
                         <CardAdmin
                             medico={medico}
-                            alEliminar={() => alert("Medico eliminado con exito")}
+                            alEliminar={() => {
+                                if (EliminarMedico(medico.id)) {
+                                    setMedicos(medicos.filter((m) => m.id !== medico.id))
+                                }
+                            }}
                             alActualizar={() => alert("Medico actualizado")}
                         />
                     </div>
