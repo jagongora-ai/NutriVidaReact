@@ -15,6 +15,7 @@ import PanelMedico from './pages/PanelMedico';
 import Novedades from './pages/Novedades';
 import DetalleNovedad from './pages/DetalleNovedad';
 import GestionarMedicos from './pages/GestionMedicos';
+import PagoSimulado from './pages/PagoSimulado';
 
 function App() {
 
@@ -120,6 +121,10 @@ function App() {
                     <Route
                         path='/admin/gestion'
                         element={<GestionarMedicos />}
+                    />
+                    <Route
+                        path="/pago"
+                        element={<PagoSimulado />}
                     />
 
                 </Routes>

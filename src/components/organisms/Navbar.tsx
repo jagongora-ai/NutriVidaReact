@@ -17,6 +17,7 @@ function Navbar() {
         <Link className="nav-link" to="/inicioSesion"> Inicie Sesion</Link>
         <Link className="nav-link" to="/registro">Registrese</Link>
         <Link className="nav-link" to="/novedades">Novedades</Link>
+        <Link className="nav-link" to="/pago">Pago Simulado</Link>
 
       </div>
     </nav>
