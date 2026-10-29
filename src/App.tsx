@@ -22,6 +22,7 @@ function App() {
 
     const ubicacion = useLocation()
     const esAdministrador = ubicacion.pathname.startsWith("/admin")
+    const esMedico = ubicacion.pathname.startsWith("/medico")
 
 
     const [pacientes, guardarPacientes] = useState<Patient[]>(() => {
@@ -65,22 +66,22 @@ function App() {
                         element={<DetalleProfesional profesionales={profesionalesIniciales} />}
                     />
                     <Route
-                        path="/pacientes"
+                        path="/medico/pacientes"
                         element={<Pacientes pacientes={pacientes} guardarPacientes={guardarPacientes} />}
                     />
 
                     <Route
-                        path="/pacientes/nuevo"
+                        path="/medico/pacientes/nuevo"
                         element={<FormularioPaciente pacientes={pacientes} guardarPacientes={guardarPacientes} />}
                     />
 
                     <Route
-                        path="/pacientes/:id/editar"
+                        path="/medico/pacientes/:id/editar"
                         element={<FormularioPaciente pacientes={pacientes} guardarPacientes={guardarPacientes} />}
                     />
 
                     <Route
-                        path="/pacientes/:id"
+                        path="/medico/pacientes/:id"
                         element={<DetallePaciente pacientes={pacientes} />}
                     />
 
