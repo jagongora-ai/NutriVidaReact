@@ -4,7 +4,7 @@ import { profesionalesIniciales } from '../../pages/Profesionales';
 import FormFieldSelect from '../molecules/SelecionCampo';
 import Input from '../atoms/Input';
 import Boton from '../atoms/Boton';
-import ValidarCitaMedica, { type DatosCitaMedica } from '../../validaciones/Agendar';
+import ValidarCitaMedica, { type DatosCitaMedica } from '../../validaciones/ValidacionAgendar';
 
 // 2. Transformas la lista de profesionales a las opciones que necesita el selector
 const opcionesDoctores = profesionalesIniciales.map((profesional) => ({
