@@ -1,28 +1,32 @@
-import React from "react";
-
-interface SelectOption {
-  value: string;
-  label: string;
+export interface SelecciontOpcion {
+    valor: string;
+    etiqueta: string;
 }
 
-interface SelectProps {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  options: SelectOption[];
-  placeholder?: string;
+type seleccionProps = {
+    nombre: string;
+    valor?: string;
+    opciones: SelecciontOpcion[];
+    alCambiar?: (valor: string) => void;
 }
 
-export const Select: React.FC<SelectProps> = ({ value, onChange, options, placeholder = '-- Seleccionar --' }) => (
-  <select
-    value={value}
-    onChange={onChange}
-    style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-  >
-    <option value="">{placeholder}</option>
-    {options.map((opt) => (
-      <option key={opt.value} value={opt.value}>
-        {opt.label}
-      </option>
-    ))}
-  </select>
-);
+function Selecion({ nombre, valor, opciones, alCambiar }: seleccionProps) {
+    return (
+        <select 
+            value={valor} 
+            name={nombre} 
+            id={nombre}
+            onChange={alCambiar ? (evento) => alCambiar(evento.target.value) : undefined}
+            className="form-control"
+        >
+            <option value="">-- Seleccionar --</option>
+            {opciones.map((opcion) => (
+                <option key={opcion.valor} value={opcion.valor}>
+                    {opcion.etiqueta}
+                </option>
+            ))}
+        </select>
+    );
+}
+
+export default Selecion;
