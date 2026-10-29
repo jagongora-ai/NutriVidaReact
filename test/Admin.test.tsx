@@ -5,21 +5,11 @@ import { render, screen } from '@testing-library/react';
 import GestionMedicos from '../src/pages/GestionMedicos';
 
 test("Muestra tarjetas de medicos juntos sus botones", () => {
-
-    const medicosDePrueba = [
-        {
-            id: 1,
-            nombre: 'Nut. Carolina Fuentes M.',
-            especialidad: 'Especialista en Nutrición y Pérdida de Peso',
-            estado: 'Activo'
-        }
-    ];
     render(
         <BrowserRouter>
             <GestionMedicos />
         </BrowserRouter>
     );
-
     expect(screen.getByText("Vista Equipo medicos")).toBeDefined()
     expect(screen.getByText('Nut. Carolina Fuentes M.')).toBeDefined()
     expect(screen.getAllByRole('button', { name: /Actualizar/i })[0]).toBeDefined()
