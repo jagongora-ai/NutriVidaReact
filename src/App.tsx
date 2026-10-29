@@ -17,6 +17,7 @@ import DetalleNovedad from './pages/DetalleNovedad';
 import GestionarMedicos from './pages/GestionMedicos';
 import PagoSimulado from './pages/PagoSimulado';
 import NavbarMedico from './components/organisms/NavbarMedico';
+import Agendar from './pages/Agendar';
 
 function App() {
     // Lee la ubicación
@@ -56,7 +57,7 @@ function App() {
                     <Route path="/novedades" element={<Novedades />} />
                     <Route path="/novedades/:id" element={<DetalleNovedad />} />
                     <Route path="/pago" element={<PagoSimulado />} />
-
+                    <Route path='/Agendar' element = {<Agendar/>} />
 
                     <Route path="/pacientes" element={<Navigate to="/medico/pacientes" replace />} />
                     <Route path="/pacientes/nuevo" element={<Navigate to="/medico/pacientes/nuevo" replace />} />
