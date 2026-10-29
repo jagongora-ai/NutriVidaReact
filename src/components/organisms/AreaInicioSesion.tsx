@@ -26,7 +26,7 @@ function AreaInicioSesion() {
         if (usuarioInicia.rol == "admin") {
             navegar("/admin");
         } else if (usuarioInicia.rol == "medico") {
-            navegar("")
+            navegar("/medico")
         } else
             navegar("/")
 
