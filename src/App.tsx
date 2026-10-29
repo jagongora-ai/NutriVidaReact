@@ -16,12 +16,11 @@ import Novedades from './pages/Novedades';
 import DetalleNovedad from './pages/DetalleNovedad';
 import GestionarMedicos from './pages/GestionMedicos';
 import PagoSimulado from './pages/PagoSimulado';
+import Agendar from './pages/Agendar';
 
 function App() {
 
-    // lee la ubicacion
     const ubicacion = useLocation()
-    //evalua si la ruta contiene ("path = /admin")
     const esAdministrador = ubicacion.pathname.startsWith("/admin")
 
 
@@ -95,7 +94,6 @@ function App() {
                         element={<InicioSesion />}
                     />
 
-                    {/*Rutas para admin*/}
                     <Route
                         path='/admin' element={<Admin />}
                     />
@@ -106,6 +104,11 @@ function App() {
                     <Route
                         path="/medico"
                         element={<PanelMedico pacientes={pacientes} />}
+                    />
+
+                    <Route
+                        path="/Agendar"
+                        element={<Agendar/>}
                     />
 
                     <Route
