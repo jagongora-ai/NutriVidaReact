@@ -12,10 +12,11 @@ function Navbar() {
 
         <Link className="nav-link" to="/">Inicio</Link>
         <Link className="nav-link" to="/profesionales">Profesionales</Link>
-        <Link className="nav-link" to="/medico">Panel médico</Link>
-        <Link className="nav-link" to="/pacientes">Pacientes</Link>
         <Link className="nav-link" to="/inicioSesion"> Inicie Sesion</Link>
         <Link className="nav-link" to="/registro">Registrese</Link>
+        <Link className="nav-link" to="/novedades">Novedades</Link>
+        <Link className="nav-link" to="/pago">Pago Simulado</Link>
+        <Link className="nav-link" to="/Agendar">Agenda hora</Link>
 
       </div>
     </nav>

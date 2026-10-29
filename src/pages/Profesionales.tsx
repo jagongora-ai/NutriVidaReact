@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Input from '../components/atoms/Input';
-import Boton from '../components/atoms/Boton';
 import TituloPagina from '../components/molecules/TituloPagina';
+
 
 export type Professional = {
     id: number
@@ -17,6 +17,7 @@ export type Professional = {
     areas: string[]
 }
 
+/* eslint-disable react-refresh/only-export-components */
 export const profesionalesIniciales: Professional[] = [
     {
         id: 1, nombre: 'Nut. Carolina Fuentes M.', especialidad: 'Especialista en Nutrición y Pérdida de Peso',
@@ -52,7 +53,7 @@ export const profesionalesIniciales: Professional[] = [
     },
 ]
 
-// Permite buscar profesionales y consultar sus perfiles o iniciar el flujo de reserva.
+
 function Profesionales({ profesionales }: {
     profesionales: Professional[]
 }) {
@@ -81,8 +82,14 @@ function Profesionales({ profesionales }: {
                 <h2>{profesional.nombre}</h2>
                 <p>{profesional.especialidad}</p>
                 <div className="card-actions">
-                  <Link className="btn btn-outline-primary" to={`/profesionales/${profesional.id}`}>Ver perfil</Link>
-                  <Boton nombre="Iniciar sesión"/>
+
+                  <Link className="btn btn-outline-primary" to={`/profesionales/${profesional.id}`}>
+                  Ver perfil
+                  </Link>
+
+                  <Link className="btn btn-primary" to="/inicioSesion">
+                  Iniciar sesión
+                  </Link>
                 </div>
               </div>
             </article>
