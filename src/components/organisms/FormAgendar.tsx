@@ -27,32 +27,24 @@ function FormConsultaMedica() {
     const [hora, setHora] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        const datosCita: DatosCitaMedica = {
-            modalidad: 'Presencial',
-            tipoConsulta,
-            doctor,
-            fecha,
-            hora
-        };
+    const datosCita = { tipoConsulta, doctor, fecha, hora };
+    const error = ValidarCitaMedica(datosCita);
 
-        if (!ValidarCitaMedica(datosCita)) {
-            return;
-        }
+    if (error !== "") {
+        alert(error); // Muestra el mensaje de error en pantalla
+        return;
+    }
 
-        const datosCitaAgendada = {
-            modalidad: 'Presencial',
-            tipoConsulta,
-            doctor,
-            fecha,
-            hora,
-            precioTotal: '22.000'
-        };
+    localStorage.setItem('citaActual', JSON.stringify({
+        ...datosCita,
+        modalidad: 'Presencial',
+        precioTotal: '22.000'
+    }));
 
-        localStorage.setItem('citaActual', JSON.stringify(datosCitaAgendada));
-        navegar('/pago');
-    };
+    navegar('/pago');
+};
 
     return (
         <div className="card p-4 shadow-sm" style={{ backgroundColor: '#5b9bd5', maxWidth: '450px', margin: '0 auto' }}>
