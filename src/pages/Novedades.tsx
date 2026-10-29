@@ -9,7 +9,7 @@ export type Novedad = {
     contenidoCompleto: string
 }
 
-/* eslint-disable react-refresh/only-export-components */
+
 export const novedades: Novedad[] = [
     {
         id: 1,
