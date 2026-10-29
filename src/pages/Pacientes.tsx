@@ -31,6 +31,10 @@ function Pacientes({ pacientes, guardarPacientes }: {
     pacientes: Patient[]
     guardarPacientes: Dispatch<SetStateAction<Patient[]>>
 }) {
+    const [busqueda, setBusqueda] = useState('');
+    const pacientesFiltrados = pacientes.filter((paciente) =>
+        paciente.nombre.toLowerCase().includes(busqueda.trim().toLowerCase()));
+
     function eliminar(id: number) {
         if (!window.confirm('¿Está seguro de que desea eliminar esta ficha?'))
             return;
@@ -51,6 +55,18 @@ function Pacientes({ pacientes, guardarPacientes }: {
             </Link>
         </div>
 
+        <div className="mb-4">
+            <label className="form-label" htmlFor="buscar-paciente">Buscar paciente por nombre</label>
+            <input
+                className="form-control"
+                id="buscar-paciente"
+                type="search"
+                placeholder="Escribe un nombre"
+                value={busqueda}
+                onChange={(evento) => setBusqueda(evento.target.value)}
+            />
+        </div>
+
         {pacientes.length === 0
             ? <div className="empty-state"><h2>Aún no hay pacientes</h2>
                 <p>Las fichas creadas aparecerán en este listado.</p>
@@ -58,6 +74,10 @@ function Pacientes({ pacientes, guardarPacientes }: {
                     Crear primera ficha
                 </Link>
             </div>
+            : pacientesFiltrados.length === 0
+                ? <div className="empty-state"><h2>No se encontraron pacientes</h2>
+                    <p>Prueba con otro nombre.</p>
+                </div>
             : <div className="row g-3">{pacientes.map((paciente) =>
                 <div className="col-12" key={paciente.id}><article className="patient-card">
                     <div><h2>{paciente.nombre || 'Sin nombre'}</h2><p><strong>RUT:</strong> {paciente.rut} ·
@@ -80,25 +100,27 @@ function Pacientes({ pacientes, guardarPacientes }: {
             </div>}
     </div>);
 }
+
 const pacienteVacio: DatosFichaPaciente = {
     nombre: '', rut: '', edad: '', fechaNacimiento: '', telefono: '', correo: '',
     enfermedades: '', alergias: '', medicamentos: '', alimentacion: '', comidas: '',
     agua: '', actividad: '', peso: '', estatura: '', objetivo: '', observaciones: '', recomendaciones: '',
 };
-const camposTexto: { etiqueta: string; nombre: keyof DatosFichaPaciente; tipo: string }[] = [
+
+const camposTexto: { etiqueta: string; nombre: keyof DatosFichaPaciente; tipo: string; placeholder?: string; inputMode?: 'decimal' | 'numeric' | 'text' }[] = [
     { etiqueta: 'Nombre completo', nombre: 'nombre', tipo: 'text' },
-    { etiqueta: 'RUT', nombre: 'rut', tipo: 'text' },
+    { etiqueta: 'RUT', nombre: 'rut', tipo: 'text', placeholder: '12345678-9' },
     { etiqueta: 'Edad', nombre: 'edad', tipo: 'number' },
     { etiqueta: 'Fecha de nacimiento', nombre: 'fechaNacimiento', tipo: 'date' },
-    { etiqueta: 'Teléfono', nombre: 'telefono', tipo: 'tel' },
-    { etiqueta: 'Correo electrónico', nombre: 'correo', tipo: 'email' },
+    { etiqueta: 'Teléfono', nombre: 'telefono', tipo: 'tel', placeholder: '912345678', inputMode: 'numeric' },
+    { etiqueta: 'Correo electrónico', nombre: 'correo', tipo: 'email', placeholder: 'nombre@correo.cl' },
     { etiqueta: 'Enfermedades', nombre: 'enfermedades', tipo: 'text' },
     { etiqueta: 'Alergias', nombre: 'alergias', tipo: 'text' },
     { etiqueta: 'Medicamentos', nombre: 'medicamentos', tipo: 'text' },
     { etiqueta: 'Comidas al día', nombre: 'comidas', tipo: 'number' },
     { etiqueta: 'Vasos de agua al día', nombre: 'agua', tipo: 'number' },
-    { etiqueta: 'Peso (kg)', nombre: 'peso', tipo: 'number' },
-    { etiqueta: 'Estatura (m)', nombre: 'estatura', tipo: 'number' },
+    { etiqueta: 'Peso (kg)', nombre: 'peso', tipo: 'text', placeholder: '55,5', inputMode: 'decimal' },
+    { etiqueta: 'Estatura (m)', nombre: 'estatura', tipo: 'text', placeholder: '1,50', inputMode: 'decimal' },
 ];
 
 
