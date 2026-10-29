@@ -50,7 +50,7 @@ function Pacientes({ pacientes, guardarPacientes }: {
     return (<div className="container page-space">
         <TituloPagina titulo="Pacientes" descripcion="Revisa las fichas y el seguimiento nutricional." />
         <div className="d-flex justify-content-end mb-4">
-            <Link className="btn btn-primary" to="/pacientes/nuevo">
+            <Link className="btn btn-primary" to="/medico/pacientes/nuevo">
                 + Crear ficha de paciente
             </Link>
         </div>
@@ -70,7 +70,7 @@ function Pacientes({ pacientes, guardarPacientes }: {
         {pacientes.length === 0
             ? <div className="empty-state"><h2>Aún no hay pacientes</h2>
                 <p>Las fichas creadas aparecerán en este listado.</p>
-                <Link className="btn btn-primary" to="/pacientes/nuevo">
+                <Link className="btn btn-primary" to="/medico/pacientes/nuevo">
                     Crear primera ficha
                 </Link>
             </div>
@@ -85,20 +85,20 @@ function Pacientes({ pacientes, guardarPacientes }: {
                         <p className="mb-0"><strong>Alimentación:</strong> {paciente.alimentacion || 'No registrada'}</p>
                     </div>
                     <div className="patient-actions">
-                        <Link className="btn btn-primary" to={`/pacientes/${paciente.id}`}>
+                        <Link className="btn btn-primary" to={`/medico/pacientes/${ paciente.id } `}>
                             Ver ficha
                         </Link>
-                        <Link className="btn btn-outline-primary" to={`/pacientes/${paciente.id}/editar`}>
-                            Editar</Link>
-                        <button className="btn btn-outline-danger" onClick={() => eliminar(paciente.id)}>
-                            Eliminar
-                        </button>
-                    </div>
-                </article>
-                </div>
+                        <Link className="btn btn-outline-primary" to={`/medico/pacientes/${ paciente.id }/editar`}>
+    Editar</Link >
+        <button className="btn btn-outline-danger" onClick={() => eliminar(paciente.id)}>
+            Eliminar
+        </button>
+                    </div >
+                </article >
+                </div >
             )}
-            </div>}
-    </div>);
+            </div >}
+    </div >);
 }
 
 const pacienteVacio: DatosFichaPaciente = {
@@ -123,7 +123,6 @@ const camposTexto: { etiqueta: string; nombre: keyof DatosFichaPaciente; tipo: s
     { etiqueta: 'Estatura (m)', nombre: 'estatura', tipo: 'text', placeholder: '1,50', inputMode: 'decimal' },
 ];
 
-
 export function FormularioPaciente({ pacientes, guardarPacientes }: {
     pacientes: Patient[]
     guardarPacientes: Dispatch<SetStateAction<Patient[]>>
@@ -145,7 +144,7 @@ export function FormularioPaciente({ pacientes, guardarPacientes }: {
             <div className="alert alert-warning">
                 No encontramos la ficha solicitada.
             </div>
-            <Link to="/pacientes">
+            <Link to="/medico/pacientes">
                 Volver a pacientes
             </Link>
         </div>;
@@ -177,7 +176,7 @@ export function FormularioPaciente({ pacientes, guardarPacientes }: {
             return;
         }
         guardarPacientes(lista);
-        navegar('/pacientes');
+        navegar('/medico/pacientes');
     }
     return (<div className="container page-space">
         <TituloPagina titulo={pacienteActual ? 'Editar ficha del paciente' : 'Nueva ficha del paciente'}
@@ -268,7 +267,7 @@ export function FormularioPaciente({ pacientes, guardarPacientes }: {
 
                 <div className="col-md-6"><div className="mb-3">
                     <label className="form-label" htmlFor="imc">
-                        IMC calculado
+                        IMC calculated
                     </label>
                     <input id="imc" name="imc" type="text"
                         value={imc} readOnly className="form-control bg-light" placeholder="Se calcula con peso y estatura"
@@ -311,14 +310,13 @@ export function FormularioPaciente({ pacientes, guardarPacientes }: {
                 <button className="btn btn-primary" type="submit">{pacienteActual
                     ? 'Guardar cambios' : 'Guardar ficha'}
                 </button>
-                <Link className="btn btn-outline-secondary" to="/pacientes">
+                <Link className="btn btn-outline-secondary" to="/medico/pacientes">
                     Cancelar
                 </Link>
             </div>
         </form>
     </div>);
 }
-
 
 export function DetallePaciente({ pacientes }: { pacientes: Patient[] }) {
     const { id } = useParams();
@@ -327,7 +325,7 @@ export function DetallePaciente({ pacientes }: { pacientes: Patient[] }) {
         return <div className="container page-space"><div className="alert alert-warning"
         >No encontramos la ficha solicitada.
         </div>
-            <Link to="/pacientes">
+            <Link to="/medico/pacientes">
                 Volver a pacientes
             </Link>
         </div>;
@@ -347,10 +345,10 @@ export function DetallePaciente({ pacientes }: { pacientes: Patient[] }) {
     return (<div className="container page-space">
         <TituloPagina titulo={paciente.nombre} descripcion="Ficha de seguimiento nutricional" />
         <div className="d-flex justify-content-end gap-2 mb-4">
-            <Link className="btn btn-outline-primary" to="/pacientes">
+            <Link className="btn btn-outline-primary" to="/medico/pacientes">
                 Volver al listado
             </Link>
-            <Link className="btn btn-primary" to={`/pacientes/${paciente.id}/editar`}>
+            <Link className="btn btn-primary" to={`/medico/pacientes/${paciente.id}/editar`}>
                 Editar ficha</Link></div>
         <div className="row g-4">
             {grupos.map(([grupo, claves]) =>
@@ -374,3 +372,4 @@ export function DetallePaciente({ pacientes }: { pacientes: Patient[] }) {
 }
 
 export default Pacientes;
+
