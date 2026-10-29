@@ -1,75 +1,35 @@
-# React + TypeScript + Vite
+# 🥗 NutriVida - Plataforma Web de Gestión Nutricional
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Bienvenido al repositorio de **NutriVida**, una aplicación web interactiva desarrollada para optimizar la gestión de consultas, profesionales de la salud y pacientes en la clínica de nutrición. Este proyecto forma parte de la asignatura **Fullstack 2**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 👥 Equipo de Desarrolladores
 
-## React Compiler
+| Nombre | Rol |
+| :--- | :--- |
+| **Jasmín Valencia** | Developer / Fullstack |
+| **Javier Góngora** | Developer / Fullstack |
+| **Manuel Mora** | Developer / Fullstack |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🚀 Tecnologías Utilizadas
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+* **Frontend:** React + TypeScript + Vite
+* **Enrutamiento:** React Router DOM
+* **Estilos & UI:** Bootstrap 5 / CSS3
+* **Testing & Cobertura:** Vitest, React Testing Library, `@vitest/coverage-v8`
+* **Entorno de Pruebas DOM:** `jsdom`
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🧪 Pruebas Unitarias y Cobertura de Código
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+El proyecto cuenta con una suite completa de **15+ pruebas unitarias** enfocadas en asegurar la calidad del código, la correcta navegación, la reactividad de la interfaz y la accesibilidad (roles A11y, etiquetas alt y estructura semántica H1/H2).
 
-```
+### Ejecutar las pruebas
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+Para correr el suite de pruebas en modo interactivo:
+```bash
+npm test
