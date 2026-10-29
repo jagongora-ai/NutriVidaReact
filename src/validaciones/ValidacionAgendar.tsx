@@ -6,38 +6,32 @@ export type DatosCitaMedica = {
     hora: string;
 };
 
-export function ValidarCitaMedica(datos: DatosCitaMedica): boolean {
+export function ValidarCitaMedica(datos: DatosCitaMedica): string {
     const { tipoConsulta, doctor, fecha, hora } = datos;
 
     if (!tipoConsulta || tipoConsulta.trim() === "") {
-        alert("Por favor selecciona el tipo de consulta / prestación.");
-        return false;
+        return "Por favor selecciona el tipo de consulta / prestación.";
     }
 
     if (!doctor || doctor.trim() === "") {
-        alert("Por favor selecciona un doctor o profesional.");
-        return false;
+        return "Por favor selecciona un doctor o profesional.";
     }
 
     if (!fecha || fecha.trim() === "") {
-        alert("La fecha de la cita es obligatoria.");
-        return false;
+        return "La fecha de la cita es obligatoria.";
     }
 
     if (!hora || hora.trim() === "") {
-        alert("La hora de la cita es obligatoria.");
-        return false;
+        return "La hora de la cita es obligatoria.";
     }
 
     const [year, month, day] = fecha.split('-').map(Number);
     const fechaSeleccionada = new Date(year, month - 1, day);
-    
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
 
     if (fechaSeleccionada < hoy) {
-        alert("La fecha a seleccionar no puede ser de los días anteriores.");
-        return false;
+        return "La fecha a seleccionar no puede ser de los días anteriores.";
     }
 
     const [horas, minutos] = hora.split(':').map(Number);
@@ -47,11 +41,10 @@ export function ValidarCitaMedica(datos: DatosCitaMedica): boolean {
     const finAtencion = 20 * 60;
 
     if (horaEnMinutos < inicioAtencion || horaEnMinutos > finAtencion) {
-        alert("Las horas de atención son de 8:00 AM a 20:00 PM.");
-        return false;
+        return "Las horas de atención son de 8:00 AM a 20:00 PM.";
     }
 
-    return true;
+    return "";
 }
 
 export default ValidarCitaMedica;
