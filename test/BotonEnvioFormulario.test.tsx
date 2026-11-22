@@ -1,4 +1,3 @@
-// @vitest-environment jsdom
 import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { test, expect, vi } from "vitest";

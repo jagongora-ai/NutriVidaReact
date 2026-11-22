@@ -1,4 +1,3 @@
-// @vitest-environment jsdom
 import { render, screen, fireEvent } from "@testing-library/react";
 import { test, expect, vi } from "vitest";
 import CardAdmin from "../src/components/molecules/CardAdmin";
