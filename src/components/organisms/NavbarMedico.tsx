@@ -17,6 +17,7 @@ function NavbarMedico() {
                 <div className="navbar-nav site-links">
                     <Link className='nav-link' to="/medico">Panel médico</Link>
                     <Link className='nav-link' to="/medico/pacientes">Pacientes</Link>
+                    <Link className='nav-link' to="/medico/agenda">Mi agenda</Link>
 
                     <button
                         className='nav-link'

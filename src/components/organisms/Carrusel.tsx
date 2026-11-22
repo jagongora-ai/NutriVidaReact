@@ -11,7 +11,6 @@ function Carrusel() {
     const imagen = imagenes[indice];
 
     useEffect(() => {
-        // Avanza automáticamente y limpia el temporizador al desmontar el carrusel.
         const intervalo = window.setInterval(() => {
             setIndice((actual) => (actual + 1) % imagenes.length);
         }, 5000);
@@ -45,5 +44,3 @@ function Carrusel() {
 
 export default Carrusel;
 
-// ‹ › Símbolos de interfaz (UI): Se utiliza frecuentemente como icono visual para botones de navegación, 
-//como la flecha de "retroceder" o "anterior" en menús, paginaciones y carruseles

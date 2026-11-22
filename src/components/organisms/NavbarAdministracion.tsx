@@ -4,7 +4,7 @@ function NavbarAdministracion() {
     const navegar = useNavigate()
     const navegarInicioSesion = () => {
         localStorage.removeItem("usuarioSesion")
-        navegar("/inicoSesion")
+        navegar("/inicioSesion")
     }
 
     return (
@@ -17,6 +17,7 @@ function NavbarAdministracion() {
                 </Link>
                 <div className="navbar-nav site-links">
                     <Link className='nav-link' to="/admin">Administracion</Link>
+                    <Link className='nav-link' to="/admin/mensajes">Mensajes</Link>
                     <button
                         className='nav-link'
                         onClick={navegarInicioSesion}

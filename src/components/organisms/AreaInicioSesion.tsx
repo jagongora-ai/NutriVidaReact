@@ -3,11 +3,12 @@ import Boton from "../atoms/Boton";
 import Titulos from "../atoms/Titulos";
 import CampoRegistro from "../molecules/CampoRegistro";
 import ValidarInicioSesion from "../../validaciones/ValidarInicioSesion";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function AreaInicioSesion() {
 
     const navegar = useNavigate()
+    const estado = useLocation().state as { desde?: string, mensaje?: string } | null
 
     const [correo, setCorreo] = useState("")
     const [password, setPassword] = useState("")
@@ -28,7 +29,7 @@ function AreaInicioSesion() {
         } else if (usuarioInicia.rol == "medico") {
             navegar("/medico")
         } else
-            navegar("/")
+            navegar(estado?.desde ?? "/")
 
         return true;
     }
@@ -42,6 +43,12 @@ function AreaInicioSesion() {
                 />
             </div>
 
+
+            {estado?.mensaje && (
+                <div className="alert alert-info" role="alert">
+                    {estado.mensaje}
+                </div>
+            )}
 
             <div className="card-body">
                 <CampoRegistro
@@ -61,6 +68,9 @@ function AreaInicioSesion() {
                 <Boton
                     nombre="Inicie sesion"
                 />
+                <p className="login-registro">
+                    ¿No tienes cuenta? <Link to="/registro">Regístrate aquí</Link>
+                </p>
             </div>
         </form>
     )

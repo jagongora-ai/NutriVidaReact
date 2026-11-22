@@ -1,4 +1,3 @@
-// Pie de página 
 function PiePagina() {
     return (<footer className="site-footer">
       <div className="container footer-content">
