@@ -1,178 +1,98 @@
-import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import BotonSecundario from '../components/atoms/BotonSecundario';
-import { validarPago, type DatosTarjeta } from '../validaciones/ValidarPago';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import TituloPagina from '../components/molecules/TituloPagina';
+import ResumenCita from '../components/molecules/ResumenCita';
+import AlertDialog from '../components/molecules/AlertDialog';
+import FormularioPago from '../components/organisms/FormularioPago';
+import BoletaElectronica from '../components/organisms/BoletaElectronica';
+import { ObtenerCitaPendiente } from '../validaciones/AgendarCita';
+import PagarCita, { type Boleta } from '../validaciones/PagarCita';
+import CancelarCita from '../validaciones/CancelarCita';
 
-const tarjetaVacia: DatosTarjeta = {
-    titular: '',
-    numero: '',
-    vencimiento: '',
-    cvv: '',
-}
+const DEMORA_PAGO_MS = 1500;
 
 function PagoSimulado() {
     const navegar = useNavigate();
-    const [tarjeta, setTarjeta] = useState(tarjetaVacia);
-    const [horaConfirmada, setHoraConfirmada] = useState(false);
+    const [cita] = useState(ObtenerCitaPendiente);
+    const [procesando, setProcesando] = useState(false);
+    const [boleta, setBoleta] = useState<Boleta | null>(null);
+    const temporizador = useRef<number | undefined>(undefined);
 
-    function enviarPago(evento: FormEvent<HTMLFormElement>) {
-        evento.preventDefault();
-        const errorValidacion = validarPago(tarjeta);
-        if (errorValidacion) {
-            window.alert(errorValidacion);
-            return;
+    useEffect(() => () => window.clearTimeout(temporizador.current), []);
+
+    if (!cita) {
+        return (
+            <div className="container page-space">
+                <TituloPagina titulo="Pago de tu hora" />
+                <div className="empty-state payment-empty">
+                    <h2>No tienes una hora pendiente de pago</h2>
+                    <p>Primero agenda una hora con alguno de nuestros profesionales y luego podrás pagarla aquí.</p>
+                    <Link className="btn btn-primary" to="/Agendar">Agendar una hora</Link>
+                </div>
+            </div>
+        );
+    }
+
+    function pagar(medioPago: string) {
+        if (!cita) return;
+        setProcesando(true);
+        temporizador.current = window.setTimeout(() => {
+            setBoleta(PagarCita(cita, medioPago));
+            setProcesando(false);
+        }, DEMORA_PAGO_MS);
+    }
+
+    function cancelar() {
+        if (CancelarCita()) {
+            navegar('/');
         }
+    }
 
-        setHoraConfirmada(true);
-        setTarjeta(tarjetaVacia);
+    function verMisHoras() {
+        navegar('/mis-horas');
     }
 
     return (
         <div className="container page-space payment-page">
+            <TituloPagina
+                titulo="Confirma y paga tu hora"
+                descripcion="Revisa los datos de tu reserva e ingresa tu tarjeta para confirmarla."
+            />
+
+            <ol className="booking-steps" aria-label="Progreso de la reserva">
+                <li className="done">Agendar</li>
+                <li className={boleta ? 'done' : 'current'}>Pagar</li>
+                <li className={boleta ? 'current' : ''}>Boleta</li>
+            </ol>
+
             <div className="payment-layout">
-                <aside className="appointment-card">
-                    <div className="appointment-card-heading">
-                        <div>
-                            <h2>Atención nutricional</h2>
-                        </div>
-                    </div>
-        
-                {/*para incorporar fecha y hora agendada*/}
-                    <div className="appointment-info">
-                        <span>Horario agendado</span>
-                        <strong>Pendiente de confirmación</strong>
-                    </div>
-
-                {/*Monto de pago*/}
-                    <div className="appointment-info appointment-amount">
-                        <span>Monto</span>
-                        <strong>Por definir</strong>
-                    </div>
-
-                </aside>
-
-                <form className="form-card payment-form" onSubmit={enviarPago} noValidate>
-                    <div className="payment-form-heading">
-                        <div>
-                            <span className="payment-label">MÉTODO DE PAGO</span>
-                            <h2>Tarjeta de crédito o débito</h2>
-                        </div>
-                    </div>
-                    <div className="mb-3">
-                        <label className="form-label" htmlFor="titular">Nombre del titular</label>
-                        <input
-                            className="form-control"
-                            id="titular"
-                            name="titular"
-                            autoComplete="cc-name"
-                            placeholder="Como aparece en la tarjeta"
-                            value={tarjeta.titular}
-                            onChange={(evento) => {
-                                setHoraConfirmada(false);
-                                setTarjeta({ ...tarjeta, titular: evento.target.value });
-                            }}
-                        />
-                    </div>
-
-                    <div className="mb-3">
-                        <label className="form-label" htmlFor="numero-tarjeta">Número de tarjeta</label>
-                        <input
-                            className="form-control"
-                            id="numero-tarjeta"
-                            name="numero-tarjeta"
-                            type="text"
-                            inputMode="numeric"
-                            autoComplete="cc-number"
-                            placeholder="0000 0000 0000 0000"
-                            maxLength={23}
-                            value={tarjeta.numero}
-                            onChange={(evento) => {
-                                setHoraConfirmada(false);
-                                const digitos = evento.target.value.replace(/\D/g, '').slice(0, 19);
-                                const numero = digitos.replace(/(\d{4})(?=\d)/g, '$1 ');
-                                setTarjeta({ ...tarjeta, numero });
-                            }}
-                        />
-                    </div>
-
-                    <div className="row">
-                        <div className="col-sm-6">
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="vencimiento">Fecha de vencimiento</label>
-                                <input
-                                    className="form-control"
-                                    id="vencimiento"
-                                    name="vencimiento"
-                                    type="text"
-                                    inputMode="numeric"
-                                    autoComplete="cc-exp"
-                                    placeholder="MM/AA"
-                                    maxLength={5}
-                                    value={tarjeta.vencimiento}
-                                    onChange={(evento) => {
-                                        setHoraConfirmada(false);
-                                        const digitos = evento.target.value.replace(/\D/g, '').slice(0, 4);
-                                        const vencimiento = digitos.length > 2
-                                            ? `${digitos.slice(0, 2)}/${digitos.slice(2)}`
-                                            : digitos;
-                                        setTarjeta({ ...tarjeta, vencimiento });
-                                    }}
-                                />
-                            </div>
-                        </div>
-                        <div className="col-sm-6">
-                            <div className="mb-3">
-                                <label className="form-label" htmlFor="cvv">Código de seguridad</label>
-                                <input
-                                    className="form-control"
-                                    id="cvv"
-                                    name="cvv"
-                                    type="password"
-                                    inputMode="numeric"
-                                    autoComplete="cc-csc"
-                                    placeholder="CVV"
-                                    maxLength={4}
-                                    value={tarjeta.cvv}
-                                    onChange={(evento) => {
-                                        setHoraConfirmada(false);
-                                        setTarjeta({
-                                            ...tarjeta,
-                                            cvv: evento.target.value.replace(/\D/g, '').slice(0, 4),
-                                        });
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="payment-actions">
-                        <BotonSecundario nombre="Cancelar" onClick={() => navegar('/')} />
-                        <button className="btn btn-primary payment-submit" type="submit">
-                            Confirmar pago
-                        </button>
-                    </div>
-                </form>
+                <ResumenCita cita={cita} />
+                <FormularioPago
+                    total={cita.precio}
+                    procesando={procesando}
+                    alPagar={pagar}
+                    alCancelar={cancelar}
+                />
             </div>
-            {horaConfirmada && (
-                <div className="confirmation-overlay" role="presentation">
-                    <section
-                        className="confirmation-modal"
-                        role="dialog"
-                        aria-modal="true"
-                        aria-labelledby="confirmation-title"
-                    >
-                        <h2 id="confirmation-title">¡Hora confirmada!</h2>
-                        <p>Monto: <strong>Por definir</strong></p>
-                        <button
-                            className="btn btn-primary"
-                            type="button"
-                            onClick={() => setHoraConfirmada(false)}
-                        >
-                            Listo
+
+            <AlertDialog
+                abierto={boleta !== null}
+                titulo="¡Pago aprobado, hora confirmada!"
+                descripcion="Esta es tu boleta electrónica. Puedes volver a verla en Mis horas."
+                alCerrar={verMisHoras}
+                acciones={
+                    <>
+                        <button type="button" className="btn btn-outline-primary" onClick={() => window.print()}>
+                            Imprimir boleta
                         </button>
-                    </section>
-                </div>
-            )}
+                        <button type="button" className="btn btn-primary" onClick={verMisHoras}>
+                            Ver mis horas
+                        </button>
+                    </>
+                }
+            >
+                {boleta && <BoletaElectronica boleta={boleta} />}
+            </AlertDialog>
         </div>
     );
 }

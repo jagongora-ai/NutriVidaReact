@@ -1,6 +1,7 @@
 import Titulos from "../components/atoms/Titulos"
 import { useEffect, useState } from "react"
-import { type Professional, profesionalesIniciales } from './Profesionales';
+import { type Professional } from './Profesionales';
+import ObtenerProfesionales from "../validaciones/ObtenerProfesionales";
 import CardAdmin from "../components/molecules/CardAdmin";
 import EliminarMedico from "../validaciones/EliminarMedico";
 import FormularioActualizar from "../components/organisms/FormularioActualizar"
@@ -8,10 +9,10 @@ import FormularioActualizar from "../components/organisms/FormularioActualizar"
 function GestionarMedicos() {
 
     useEffect(() => {
-        localStorage.setItem("medicos", JSON.stringify(profesionalesIniciales))
+        localStorage.setItem("medicos", JSON.stringify(ObtenerProfesionales()))
     }, [])
 
-    const [medicos, setMedicos] = useState<Professional[]>(profesionalesIniciales)
+    const [medicos, setMedicos] = useState<Professional[]>(ObtenerProfesionales)
     const [medicoSeleccionado, setMedicoSeleccionado] = useState<Professional | null>(null)
 
     return (

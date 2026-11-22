@@ -1,8 +1,9 @@
 import { Link, useParams } from 'react-router-dom';
 import TituloPagina from '../components/molecules/TituloPagina';
+import ListaPrestaciones from '../components/molecules/ListaPrestaciones';
+import ObtenerPrestaciones from '../validaciones/ObtenerPrestaciones';
 import type { Professional } from './Profesionales';
 
-// Presenta los datos del profesional seleccionado.
 function DetalleProfesional({ profesionales }: {
   profesionales: Professional[]
 }) {
@@ -36,9 +37,11 @@ function DetalleProfesional({ profesionales }: {
         <ul>{profesional.estudios.map((estudio) => <li key={estudio}>{estudio}</li>)}</ul>
         <h4>Áreas de atención</h4>
         <div className="tag-list">{profesional.areas.map((area) => <span key={area}>{area}</span>)}</div>
+        <h4>Prestaciones y valores</h4>
+        <ListaPrestaciones prestaciones={ObtenerPrestaciones()} conDuracion />
         <div className="mt-4">
-          <Link className="btn btn-primary" to="/inicioSesion">
-            Iniciar sesión para agendar
+          <Link className="btn btn-primary" to={`/Agendar?profesional=${profesional.id}`}>
+            Agendar hora con este profesional
           </Link>
         </div>
       </div>
