@@ -14,7 +14,8 @@ function ValidarInicioSesion(correo: string, password: string): boolean {
         edad: 23,
         correo: "medico@nutrivida.cl",
         password: "medico2026Nutri",
-        rol: "medico"
+        rol: "medico",
+        profesionalId: 1
     };
 
     const buscar = localStorage.getItem("usuarios") || "[]"
