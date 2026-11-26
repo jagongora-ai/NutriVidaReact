@@ -1,6 +1,5 @@
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import { useState, type ReactElement } from 'react';
-
+import { useEffect, useState, type ReactElement } from 'react';
 import Navbar from './components/organisms/Navbar';
 import NavbarAdministracion from './components/organisms/NavbarAdministracion';
 import PiePagina from './components/organisms/PiePagina';
@@ -24,6 +23,7 @@ import AgendaMedico from './pages/AgendaMedico';
 import MensajesAdmin from './pages/MensajesAdmin';
 import ObtenerProfesionales from './validaciones/ObtenerProfesionales';
 import ValidarSesion from './validaciones/ValidarSesion';
+import ObtenerFichas from './validaciones/ObtenerFichas';
 
 const mensajesAcceso: Record<string, string> = {
     Cliente: 'Debes iniciar sesión como paciente para continuar.',
@@ -37,15 +37,15 @@ function App() {
     const esMedico = ubicacion.pathname.startsWith("/medico");
     const profesionales = ObtenerProfesionales();
 
-    const [pacientes, guardarPacientes] = useState<Patient[]>(() => {
-        try {
-            const pacientesGuardados = localStorage.getItem('pacientes');
-            return pacientesGuardados ? JSON.parse(pacientesGuardados) as Patient[] : [];
-        } catch {
-            window.alert('No se pudieron cargar los pacientes guardados.');
-            return [];
+    const [pacientes, guardarPacientes] = useState<Patient[]>([]);
+    const esSesionDeMedico = ValidarSesion("medico")
+
+    useEffect(() => {
+
+        if (esSesionDeMedico) {
+            ObtenerFichas().then((lista) => guardarPacientes(lista))
         }
-    });
+    }, [esSesionDeMedico])
 
     const proteger = (rol: string, pagina: ReactElement) => {
         if (ValidarSesion(rol)) {

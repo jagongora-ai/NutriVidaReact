@@ -3,6 +3,9 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import TituloPagina from '../components/molecules/TituloPagina';
 import CampoRegistro from '../components/molecules/CampoRegistro';
 import { validarFichaPaciente, type DatosFichaPaciente } from '../validaciones/ValidarFichaPaciente';
+import GuardarFicha from '../validaciones/GuardarFichas';
+import ObtenerFichas from '../validaciones/ObtenerFichas';
+import EliminarFicha from '../validaciones/EliminarFicha';
 
 export type Patient = {
     id: number
@@ -35,18 +38,22 @@ function Pacientes({ pacientes, guardarPacientes }: {
     const pacientesFiltrados = pacientes.filter((paciente) =>
         paciente.nombre.toLowerCase().includes(busqueda.trim().toLowerCase()));
 
-    function eliminar(id: number) {
+
+
+
+    async function eliminar(id: number) {
         if (!window.confirm('¿Está seguro de que desea eliminar esta ficha?'))
             return;
-        const actualizados = pacientes.filter((paciente) => paciente.id !== id);
-        try {
-            localStorage.setItem('pacientes', JSON.stringify(actualizados));
-        } catch {
-            window.alert('No se pudo eliminar la ficha. Inténtalo nuevamente.');
-            return;
-        }
-        guardarPacientes(actualizados);
+        const eliminado = await EliminarFicha(id)
+
+        if (!eliminado) { return; }
+        guardarPacientes(pacientes.filter((paciente) =>
+            paciente.id !== id))
     }
+
+
+
+
     return (<div className="container page-space">
         <TituloPagina titulo="Pacientes" descripcion="Revisa las fichas y el seguimiento nutricional." />
         <div className="d-flex justify-content-end mb-4">
@@ -78,26 +85,26 @@ function Pacientes({ pacientes, guardarPacientes }: {
                 ? <div className="empty-state"><h2>No se encontraron pacientes</h2>
                     <p>Prueba con otro nombre.</p>
                 </div>
-            : <div className="row g-3">{pacientes.map((paciente) =>
-                <div className="col-12" key={paciente.id}><article className="patient-card">
-                    <div><h2>{paciente.nombre || 'Sin nombre'}</h2><p><strong>RUT:</strong> {paciente.rut} ·
-                        <strong>Edad:</strong> {paciente.edad} años</p>
-                        <p className="mb-0"><strong>Alimentación:</strong> {paciente.alimentacion || 'No registrada'}</p>
-                    </div>
-                    <div className="patient-actions">
-                        <Link className="btn btn-primary" to={`/medico/pacientes/${ paciente.id } `}>
-                            Ver ficha
-                        </Link>
-                        <Link className="btn btn-outline-primary" to={`/medico/pacientes/${ paciente.id }/editar`}>
-    Editar</Link >
-        <button className="btn btn-outline-danger" onClick={() => eliminar(paciente.id)}>
-            Eliminar
-        </button>
+                : <div className="row g-3">{pacientes.map((paciente) =>
+                    <div className="col-12" key={paciente.id}><article className="patient-card">
+                        <div><h2>{paciente.nombre || 'Sin nombre'}</h2><p><strong>RUT:</strong> {paciente.rut} ·
+                            <strong>Edad:</strong> {paciente.edad} años</p>
+                            <p className="mb-0"><strong>Alimentación:</strong> {paciente.alimentacion || 'No registrada'}</p>
+                        </div>
+                        <div className="patient-actions">
+                            <Link className="btn btn-primary" to={`/medico/pacientes/${paciente.id} `}>
+                                Ver ficha
+                            </Link>
+                            <Link className="btn btn-outline-primary" to={`/medico/pacientes/${paciente.id}/editar`}>
+                                Editar</Link >
+                            <button className="btn btn-outline-danger" onClick={() => eliminar(paciente.id)}>
+                                Eliminar
+                            </button>
+                        </div >
+                    </article >
                     </div >
-                </article >
-                </div >
-            )}
-            </div >}
+                )}
+                </div >}
     </div >);
 }
 
@@ -136,6 +143,7 @@ export function FormularioPaciente({ pacientes, guardarPacientes }: {
             String(pacienteActual[key as keyof Patient] ?? ''),
         ])) as DatosFichaPaciente
         : pacienteVacio);
+    const [enviando, setEnviando] = useState(false);
     const imc = formulario.peso && formulario.estatura && Number(formulario.estatura) > 0
         ? (Number(formulario.peso) / Number(formulario.estatura) ** 2).toFixed(2)
         : '';
@@ -148,7 +156,7 @@ export function FormularioPaciente({ pacientes, guardarPacientes }: {
                 Volver a pacientes
             </Link>
         </div>;
-    function enviar(evento: FormEvent<HTMLFormElement>) {
+    async function enviar(evento: FormEvent<HTMLFormElement>) {
         evento.preventDefault();
 
         const errorValidacion = validarFichaPaciente(formulario);
@@ -156,25 +164,25 @@ export function FormularioPaciente({ pacientes, guardarPacientes }: {
             window.alert(errorValidacion);
             return;
         }
-        const edad = Number(formulario.edad);
-        const comidas = Number(formulario.comidas);
-        const agua = Number(formulario.agua);
-        const peso = Number(formulario.peso);
-        const estatura = Number(formulario.estatura);
-        const actualizado = {
-            id: pacienteActual?.id ?? Math.max(0, ...pacientes.map((persona) => persona.id)) + 1,
+
+        if (enviando) return;
+
+        const datos = {
             ...formulario,
-            edad, comidas, agua, peso, estatura, imc: Number(imc),
+            edad: Number(formulario.edad),
+            comidas: Number(formulario.comidas),
+            agua: Number(formulario.agua),
+            peso: Number(formulario.peso),
+            estatura: Number(formulario.estatura),
         };
-        const lista = pacienteActual
-            ? pacientes.map((persona) => persona.id === pacienteActual.id ? actualizado : persona)
-            : [...pacientes, actualizado];
-        try {
-            localStorage.setItem('pacientes', JSON.stringify(lista));
-        } catch {
-            window.alert('No se pudo guardar la ficha. Inténtalo nuevamente.');
-            return;
-        }
+
+        setEnviando(true);
+        const guardado = await GuardarFicha(datos, pacienteActual?.id);
+        setEnviando(false);
+
+        if (!guardado) return;
+
+        const lista = await ObtenerFichas();
         guardarPacientes(lista);
         navegar('/medico/pacientes');
     }
@@ -307,8 +315,8 @@ export function FormularioPaciente({ pacientes, guardarPacientes }: {
                 </div>
             </div>
             <div className="d-flex gap-2 mt-3">
-                <button className="btn btn-primary" type="submit">{pacienteActual
-                    ? 'Guardar cambios' : 'Guardar ficha'}
+                <button className="btn btn-primary" type="submit" disabled={enviando}>
+                    {enviando ? 'Guardando...' : pacienteActual ? 'Guardar cambios' : 'Guardar ficha'}
                 </button>
                 <Link className="btn btn-outline-secondary" to="/medico/pacientes">
                     Cancelar
