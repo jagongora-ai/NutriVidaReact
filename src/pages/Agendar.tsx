@@ -1,9 +1,14 @@
 import TituloPagina from "../components/molecules/TituloPagina";
 import FormConsultaMedica from "../components/organisms/FormAgendar";
-import ObtenerProfesionales from "../validaciones/ObtenerProfesionales";
-import ObtenerPrestaciones from "../validaciones/ObtenerPrestaciones";
+import type { Professional } from "./Profesionales";
+import type { Prestacion } from "../validaciones/ObtenerPrestaciones";
 
-function Agendar() {
+type agendarProps = {
+    profesionales: Professional[]
+    prestaciones: Prestacion[]
+}
+
+function Agendar({ profesionales, prestaciones }: agendarProps) {
     return (
         <main className="container page-space">
             <TituloPagina
@@ -18,7 +23,7 @@ function Agendar() {
             </ol>
 
             <div className="d-flex justify-content-center my-4">
-                <FormConsultaMedica profesionales={ObtenerProfesionales()} prestaciones={ObtenerPrestaciones()} />
+                <FormConsultaMedica profesionales={profesionales} prestaciones={prestaciones} />
             </div>
         </main>
     );
