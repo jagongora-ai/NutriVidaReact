@@ -1,8 +1,26 @@
 import { render, screen, cleanup } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { test, expect, beforeEach, afterEach } from "vitest";
-import Profesionales from "../src/pages/Profesionales";
-import ObtenerProfesionales from "../src/validaciones/ObtenerProfesionales";
+import Profesionales, { type Professional } from "../src/pages/Profesionales";
+import type { Prestacion } from "../src/validaciones/ObtenerPrestaciones";
+
+const profesional: Professional = {
+    id: 1,
+    nombre: "Nut. Carolina Fuentes M.",
+    especialidad: "Especialista en Nutrición y Pérdida de Peso",
+    imagen: "/ProfesionalesIMG/medica 1.jpg",
+    ubicacion: "Temuco, Chile",
+    atencion: "Presencial y Online",
+    experiencia: "Más de 10 años en nutrición clínica",
+    sobreMi: "Diseña planes de alimentación equilibrados.",
+    estudios: ["Nutrición, Universidad de La Frontera"],
+    areas: ["Pérdida de peso"],
+};
+
+const prestaciones: Prestacion[] = [
+    { valor: "Consulta", etiqueta: "Consulta Nutricionista", precio: 22000, duracion: "45 min" },
+    { valor: "Plan especializado", etiqueta: "Plan especializado", precio: 35000, duracion: "60 min" },
+];
 
 beforeEach(() => {
     localStorage.clear();
@@ -13,7 +31,7 @@ afterEach(cleanup);
 function mostrarProfesionales() {
     render(
         <BrowserRouter>
-            <Profesionales profesionales={ObtenerProfesionales().slice(0, 1)} />
+            <Profesionales profesionales={[profesional]} prestaciones={prestaciones} />
         </BrowserRouter>
     );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import TituloPagina from '../components/molecules/TituloPagina';
 import ResumenCita from '../components/molecules/ResumenCita';
@@ -9,16 +9,11 @@ import { ObtenerCitaPendiente } from '../validaciones/AgendarCita';
 import PagarCita, { type Boleta } from '../validaciones/PagarCita';
 import CancelarCita from '../validaciones/CancelarCita';
 
-const DEMORA_PAGO_MS = 1500;
-
 function PagoSimulado() {
     const navegar = useNavigate();
     const [cita] = useState(ObtenerCitaPendiente);
     const [procesando, setProcesando] = useState(false);
     const [boleta, setBoleta] = useState<Boleta | null>(null);
-    const temporizador = useRef<number | undefined>(undefined);
-
-    useEffect(() => () => window.clearTimeout(temporizador.current), []);
 
     if (!cita) {
         return (
@@ -33,17 +28,20 @@ function PagoSimulado() {
         );
     }
 
-    function pagar(medioPago: string) {
+    async function pagar(medioPago: string) {
         if (!cita) return;
         setProcesando(true);
-        temporizador.current = window.setTimeout(() => {
-            setBoleta(PagarCita(cita, medioPago));
-            setProcesando(false);
-        }, DEMORA_PAGO_MS);
+        const boletaEmitida = await PagarCita(cita.id, medioPago);
+        setProcesando(false);
+
+        if (boletaEmitida) {
+            setBoleta(boletaEmitida);
+        }
     }
 
-    function cancelar() {
-        if (CancelarCita()) {
+    async function cancelar() {
+        if (!cita) return;
+        if (await CancelarCita(cita.id)) {
             navegar('/');
         }
     }

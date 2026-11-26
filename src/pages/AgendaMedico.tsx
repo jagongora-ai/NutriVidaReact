@@ -1,13 +1,19 @@
+import { useEffect, useState } from "react";
 import TituloPagina from "../components/molecules/TituloPagina";
 import CardCita from "../components/molecules/CardCita";
-import ObtenerCitas from "../validaciones/ObtenerCitas";
+import ObtenerAgenda from "../validaciones/ObtenerAgenda";
+import type { Cita } from "../validaciones/AgendarCita";
 import { ObtenerSesion } from "../validaciones/ValidarSesion";
 
 function AgendaMedico() {
+    const [citas, setCitas] = useState<Cita[]>([]);
     const sesion = ObtenerSesion();
     const hoy = new Date().toLocaleDateString("sv-SE");
 
-    const citas = ObtenerCitas().filter((c) => c.doctorId === sesion.profesionalId);
+    useEffect(() => {
+        ObtenerAgenda().then((lista) => setCitas(lista));
+    }, []);
+
     const proximas = citas.filter((c) => c.fecha >= hoy);
     const anteriores = citas.filter((c) => c.fecha < hoy).reverse();
 

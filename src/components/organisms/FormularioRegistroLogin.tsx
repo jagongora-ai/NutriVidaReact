@@ -3,6 +3,7 @@ import Boton from "../atoms/Boton"
 import BotonSecundario from "../atoms/BotonSecundario"
 import CampoRegistro from "../molecules/CampoRegistro"
 import ValidarRegistro from "../../validaciones/ValidarRegistroLogin"
+import RegistrarUsuario from "../../validaciones/RegistrarUsuario"
 
 function FormularioRegistroLogin() {
 
@@ -11,8 +12,9 @@ function FormularioRegistroLogin() {
     const [edad, setEdad] = useState("")
     const [correo, setCorreo] = useState("")
     const [password, setPassword] = useState("")
+    const [enviando, setEnviando] = useState(false)
 
-    const manejarDatosRegistro = (e: React.SubmitEvent<HTMLFormElement>) => {
+    const manejarDatosRegistro = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         const datosFormulario = {
@@ -30,13 +32,17 @@ function FormularioRegistroLogin() {
             return;
         }
 
+        if (enviando) {
+            return;
+        }
 
-        const usuariosGuardados = localStorage.getItem("usuarios")
-        const listarUsuarios = usuariosGuardados ? JSON.parse(usuariosGuardados) : []
-        listarUsuarios.push(datosFormulario)
+        setEnviando(true)
+        const registrado = await RegistrarUsuario(datosFormulario)
+        setEnviando(false)
 
-        localStorage.setItem("usuarios", JSON.stringify(listarUsuarios))
-        alert("Usuario Registrado con exito!!")
+        if (registrado) {
+            limpiarCampos()
+        }
     }
 
     const limpiarCampos = () => {
@@ -91,7 +97,8 @@ function FormularioRegistroLogin() {
 
             <div className="d-flex flex-column gap-3">
                 <Boton
-                    nombre="Registrarse"
+                    nombre={enviando ? "Registrando..." : "Registrarse"}
+                    deshabilitado={enviando}
                 />
                 <BotonSecundario
                     nombre="Limpiar campos"

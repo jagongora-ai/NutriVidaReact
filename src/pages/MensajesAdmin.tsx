@@ -1,13 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TituloPagina from "../components/molecules/TituloPagina";
 import CardMensaje from "../components/molecules/CardMensaje";
 import FormularioRespuesta from "../components/organisms/FormularioRespuesta";
-import { ObtenerMensajes } from "../validaciones/GuardarMensaje";
+import ObtenerTodosLosMensajes from "../validaciones/ObtenerTodosLosMensajes";
+import type { Mensaje } from "../validaciones/GuardarMensaje";
 
 function MensajesAdmin() {
-    const [mensajes, setMensajes] = useState(ObtenerMensajes);
+    const [mensajes, setMensajes] = useState<Mensaje[]>([]);
     const pendientes = mensajes.filter((m) => m.estado !== "Respondido");
     const respondidos = mensajes.filter((m) => m.estado === "Respondido");
+
+    useEffect(() => {
+        ObtenerTodosLosMensajes().then((lista) => setMensajes(lista));
+    }, []);
 
     return (
         <div className="container page-space">
@@ -23,7 +28,10 @@ function MensajesAdmin() {
                 ) : (
                     pendientes.map((mensaje) => (
                         <CardMensaje key={mensaje.id} mensaje={mensaje} mostrarRemitente>
-                            <FormularioRespuesta mensajeId={mensaje.id} alResponder={() => setMensajes(ObtenerMensajes())} />
+                            <FormularioRespuesta
+                                mensajeId={mensaje.id}
+                                alResponder={() => ObtenerTodosLosMensajes().then((lista) => setMensajes(lista))}
+                            />
                         </CardMensaje>
                     ))
                 )}

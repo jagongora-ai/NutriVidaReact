@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Input from '../components/atoms/Input';
 import TituloPagina from '../components/molecules/TituloPagina';
 import ListaPrestaciones from '../components/molecules/ListaPrestaciones';
-import ObtenerPrestaciones from '../validaciones/ObtenerPrestaciones';
+import type { Prestacion } from '../validaciones/ObtenerPrestaciones';
 import { ObtenerSesion } from '../validaciones/ValidarSesion';
 
 
@@ -21,11 +21,11 @@ export type Professional = {
 }
 
 
-function Profesionales({ profesionales }: {
+function Profesionales({ profesionales, prestaciones = [] }: {
     profesionales: Professional[]
+    prestaciones?: Prestacion[]
 }) {
     const [busqueda, setBusqueda] = useState('');
-    const prestaciones = ObtenerPrestaciones();
     const haySesion = Boolean(ObtenerSesion().rol);
     const termino = busqueda.trim().toLocaleLowerCase('es');
     const resultados = profesionales.filter((profesional) => `${profesional.nombre} ${profesional.especialidad}`

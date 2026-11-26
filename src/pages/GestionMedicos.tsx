@@ -1,19 +1,25 @@
 import Titulos from "../components/atoms/Titulos"
-import { useEffect, useState } from "react"
+import { useState, type Dispatch, type SetStateAction } from "react"
 import { type Professional } from './Profesionales';
 import ObtenerProfesionales from "../validaciones/ObtenerProfesionales";
 import CardAdmin from "../components/molecules/CardAdmin";
 import EliminarMedico from "../validaciones/EliminarMedico";
 import FormularioActualizar from "../components/organisms/FormularioActualizar"
 
-function GestionarMedicos() {
+type gestionMedicosProps = {
+    medicos: Professional[]
+    guardarMedicos: Dispatch<SetStateAction<Professional[]>>
+}
 
-    useEffect(() => {
-        localStorage.setItem("medicos", JSON.stringify(ObtenerProfesionales()))
-    }, [])
+function GestionarMedicos({ medicos, guardarMedicos }: gestionMedicosProps) {
 
-    const [medicos, setMedicos] = useState<Professional[]>(ObtenerProfesionales)
     const [medicoSeleccionado, setMedicoSeleccionado] = useState<Professional | null>(null)
+
+    async function eliminar(id: number) {
+        if (await EliminarMedico(id)) {
+            guardarMedicos(medicos.filter((m) => m.id !== id))
+        }
+    }
 
     return (
         <div className="container my-5">
@@ -22,14 +28,11 @@ function GestionarMedicos() {
             {medicoSeleccionado && (
                 <div className="mb-4 p-3 border rounded bg-light">
                     <FormularioActualizar
+                        key={medicoSeleccionado.id}
                         medico={medicoSeleccionado}
                         alCerrar={() => {
                             setMedicoSeleccionado(null)
-
-                            const guardados = localStorage.getItem("medicos")
-                            if (guardados) {
-                                setMedicos(JSON.parse(guardados))
-                            }
+                            ObtenerProfesionales().then((lista) => guardarMedicos(lista))
                         }}
                     />
                 </div>
@@ -40,11 +43,7 @@ function GestionarMedicos() {
                     <div key={medico.id} className="col-12 col-md-6 col-lg-4">
                         <CardAdmin
                             medico={medico}
-                            alEliminar={() => {
-                                if (EliminarMedico(medico.id)) {
-                                    setMedicos(medicos.filter((m) => m.id !== medico.id))
-                                }
-                            }}
+                            alEliminar={() => eliminar(medico.id)}
                             alActualizar={() => setMedicoSeleccionado(medico)}
                         />
                     </div>
@@ -54,4 +53,3 @@ function GestionarMedicos() {
     )
 }
 export default GestionarMedicos
-

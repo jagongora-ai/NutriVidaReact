@@ -12,15 +12,18 @@ function AreaInicioSesion() {
 
     const [correo, setCorreo] = useState("")
     const [password, setPassword] = useState("")
+    const [enviando, setEnviando] = useState(false)
 
-    const manejarLogin = (e: React.SubmitEvent<HTMLFormElement>) => {
+    const manejarLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        const esLogeado = ValidarInicioSesion(correo, password)
+        if (enviando) { return; }
 
-        if (!esLogeado) {
-            return;
-        }
+        setEnviando(true)
+        const esLogeado = await ValidarInicioSesion(correo, password)
+
+        setEnviando(false)
+        if (!esLogeado) { return; }
 
         const usuarioInicia = JSON.parse(localStorage.getItem("usuarioSesion") || "{}")
 
@@ -66,7 +69,8 @@ function AreaInicioSesion() {
                     alCambiar={setPassword}
                 />
                 <Boton
-                    nombre="Inicie sesion"
+                    nombre={enviando ? "Ingresando..." : "Inicie sesion"}
+                    deshabilitado = {enviando}
                 />
                 <p className="login-registro">
                     ¿No tienes cuenta? <Link to="/registro">Regístrate aquí</Link>

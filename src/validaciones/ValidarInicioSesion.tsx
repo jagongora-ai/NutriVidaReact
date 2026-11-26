@@ -1,35 +1,30 @@
-function ValidarInicioSesion(correo: string, password: string): boolean {
-    const adminFicticio = {
-        nombre: "Joaquin Andres vargas",
-        rut: "2234567-1",
-        edad: 35,
-        correo: "admin@nutrivida.cl",
-        password: "admin2026Nutri",
-        rol: "admin"
-    };
-
-    const medicoFicticio = {
-        nombre: "Carolina fuentes",
-        rut: "12345453-1",
-        edad: 23,
-        correo: "medico@nutrivida.cl",
-        password: "medico2026Nutri",
-        rol: "medico",
-        profesionalId: 1
-    };
-
-    const buscar = localStorage.getItem("usuarios") || "[]"
-    const usuariosValidos = JSON.parse(buscar)
-
-    const lista = [adminFicticio, medicoFicticio, ...usuariosValidos]
-    const usuarioEncontrado = lista.find((u) => u.correo === correo && u.password === password)
-
-    if (!usuarioEncontrado) {
-        alert("Credenciales Invalidas")
-        return false;
+async function ValidarSesion(correo: string, password: string): Promise<boolean> {
+    try {
+        const respuesta = await fetch("http://localhost:8080/api/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                correo: correo.trim(),
+                password: password,
+            }),
+        })
+        if(!respuesta.ok){
+            const error = await respuesta.json()
+            alert(error.mensaje)
+            return false
+        }
+       
+        const usuario = await respuesta.json()
+        localStorage.setItem("usuarioSesion", JSON.stringify(usuario))
+        alert("Logeado exitosamente")
+        return true
+    }catch(error){
+        console.error("Error al iniciar sesion",error)
+        alert("No se pudo contactar con el servidor. Intente nuevamente.")
+        return false
     }
-    localStorage.setItem("usuarioSesion", JSON.stringify(usuarioEncontrado))
-    alert("Logeado exitosamente")
-    return true
 }
-export default ValidarInicioSesion
+
+export default ValidarSesion
