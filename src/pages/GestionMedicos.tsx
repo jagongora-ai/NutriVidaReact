@@ -15,6 +15,12 @@ function GestionarMedicos({ medicos, guardarMedicos }: gestionMedicosProps) {
 
     const [medicoSeleccionado, setMedicoSeleccionado] = useState<Professional | null>(null)
 
+    async function eliminar(id: number) {
+        if (await EliminarMedico(id)) {
+            guardarMedicos(medicos.filter((m) => m.id !== id))
+        }
+    }
+
     return (
         <div className="container my-5">
             <Titulos texto=" Vista Equipo medicos " />
@@ -37,11 +43,7 @@ function GestionarMedicos({ medicos, guardarMedicos }: gestionMedicosProps) {
                     <div key={medico.id} className="col-12 col-md-6 col-lg-4">
                         <CardAdmin
                             medico={medico}
-                            alEliminar={() => {
-                                if (EliminarMedico(medico.id)) {
-                                    guardarMedicos(medicos.filter((m) => m.id !== medico.id))
-                                }
-                            }}
+                            alEliminar={() => eliminar(medico.id)}
                             alActualizar={() => setMedicoSeleccionado(medico)}
                         />
                     </div>

@@ -20,7 +20,7 @@ function FormularioActualizar({ medico, alCerrar }: actualizarProps) {
     const [experiencia, setExperiencia] = useState(medico.experiencia)
     const [estudios, setEstudios] = useState(medico.estudios)
 
-    const accionActualizar = (e: React.FormEvent) => {
+    const accionActualizar = async (e: React.FormEvent) => {
 
         e.preventDefault()
         const datosAValidar = { nombre, especialidad, imagen, experiencia, estudios }
@@ -38,7 +38,7 @@ function FormularioActualizar({ medico, alCerrar }: actualizarProps) {
             experiencia,
             estudios
         }
-        const actualizado = ActualizarMedico(medicoEditado)
+        const actualizado = await ActualizarMedico(medicoEditado)
         if (actualizado) {
             alCerrar()
         }

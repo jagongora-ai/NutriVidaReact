@@ -1,6 +1,7 @@
 import type { Professional } from "../pages/Profesionales";
+import { ObtenerSesion } from "./ValidarSesion";
 
-function ActualizarMedico(medicoEditado: Professional): boolean {
+async function ActualizarMedico(medicoEditado: Professional): Promise<boolean> {
 
     const quiereActualizar = window.confirm("¿Esta seguro de actualizar?")
 
@@ -8,18 +9,30 @@ function ActualizarMedico(medicoEditado: Professional): boolean {
         return false;
     }
 
-    const buscarMedico = localStorage.getItem("medicos") || "[]"
-    const medicoBuscado = JSON.parse(buscarMedico)
+    const sesion = ObtenerSesion()
+    try {
+        const respuesta = await fetch(`http://localhost:8082/api/profesionales/${medicoEditado.id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + sesion.token,
+            },
+            body: JSON.stringify(medicoEditado),
+        })
 
-    if (medicoBuscado.length === 0) {
-        alert("No hay medicos en el sistema para actualizar")
-        return false;
+        if (!respuesta.ok) {
+            const error = await respuesta.json()
+            alert(error.mensaje)
+            return false
+        }
+
+        alert("Actualizado con exito")
+        return true
+
+    } catch (error) {
+        console.error("Error al actualizar el medico:", error)
+        alert("No se pudo conectar con el servidor. Intente nuevamente.")
+        return false
     }
-
-    const editado = medicoBuscado.map((m: any) => m.id === medicoEditado.id ? medicoEditado : m)
-    localStorage.setItem("medicos", JSON.stringify(editado))
-
-    alert("Actualizado con exito")
-    return true
 }
 export default ActualizarMedico
