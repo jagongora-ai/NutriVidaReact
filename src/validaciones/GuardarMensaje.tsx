@@ -9,11 +9,6 @@ export interface Mensaje extends DatosContacto {
     fechaRespuesta: string;
 }
 
-export function ObtenerMensajes(): Mensaje[] {
-    const mensajes: Mensaje[] = JSON.parse(localStorage.getItem("mensajesContacto") || "[]")
-    return mensajes.sort((a, b) => b.fecha.localeCompare(a.fecha))
-}
-
 async function GuardarMensaje(datos: DatosContacto): Promise<boolean> {
 
     const sesion = ObtenerSesion()

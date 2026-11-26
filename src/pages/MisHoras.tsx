@@ -1,20 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TituloPagina from "../components/molecules/TituloPagina";
 import CardCita from "../components/molecules/CardCita";
 import AlertDialog from "../components/molecules/AlertDialog";
 import BoletaElectronica from "../components/organisms/BoletaElectronica";
 import ObtenerCitas from "../validaciones/ObtenerCitas";
+import type { Cita } from "../validaciones/AgendarCita";
 import type { Boleta } from "../validaciones/PagarCita";
 import ObtenerBoleta from "../validaciones/ObtenerBoleta";
-import { ObtenerSesion } from "../validaciones/ValidarSesion";
 
 function MisHoras() {
+    const [misCitas, setMisCitas] = useState<Cita[]>([]);
     const [boleta, setBoleta] = useState<Boleta | null>(null);
-    const sesion = ObtenerSesion();
     const hoy = new Date().toLocaleDateString("sv-SE");
 
-    const misCitas = ObtenerCitas().filter((c) => c.correo === sesion.correo);
+    useEffect(() => {
+        ObtenerCitas().then((lista) => setMisCitas(lista));
+    }, []);
+
     const proximas = misCitas.filter((c) => c.fecha >= hoy);
     const anteriores = misCitas.filter((c) => c.fecha < hoy).reverse();
 
