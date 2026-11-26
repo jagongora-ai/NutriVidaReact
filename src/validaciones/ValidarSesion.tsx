@@ -4,6 +4,7 @@ export interface UsuarioSesion {
     correo?: string;
     rol?: string;
     profesionalId?: number;
+    token?: string;
 }
 
 export function ObtenerSesion(): UsuarioSesion {

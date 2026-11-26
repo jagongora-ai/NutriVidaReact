@@ -17,8 +17,11 @@ function FormularioContacto({ alEnviar }: formularioContactoProps) {
     const [correo, setCorreo] = useState(sesion.correo ?? "")
     const [asunto, setAsunto] = useState("")
     const [mensaje, setMensaje] = useState("")
+    const [enviando, setEnviando] = useState(false)
 
-    const enviarMensaje = (e: FormEvent<HTMLFormElement>) => {
+
+
+    const enviarMensaje = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         const datosContacto = { nombre, correo, asunto, mensaje }
@@ -28,7 +31,11 @@ function FormularioContacto({ alEnviar }: formularioContactoProps) {
             return;
         }
 
-        const guardado = GuardarMensaje(datosContacto)
+        if(enviando) return;
+        setEnviando(true)
+        const guardado = await GuardarMensaje(datosContacto)
+        setEnviando(false)
+
         if (guardado) {
             setAsunto("")
             setMensaje("")
@@ -72,7 +79,9 @@ function FormularioContacto({ alEnviar }: formularioContactoProps) {
                 alCambiar={setMensaje}
             />
 
-            <Boton nombre="Enviar mensaje" />
+            <Boton nombre={enviando ? "Enviando..." : "Enviar Mensaje"}
+                deshabilitado = {enviando}
+            />
         </form>
     )
 }
