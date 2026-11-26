@@ -52,10 +52,7 @@ function FormConsultaMedica({ profesionales, prestaciones }: formAgendarProps) {
         etiqueta: `${prestacion.etiqueta} · $${prestacion.precio.toLocaleString('es-CL')}`,
     }));
 
-    const doctorDesdeUrl = parametros.get('profesional') ?? '';
-    const doctorInicial = opcionesDoctores.some((opcion) => opcion.valor === doctorDesdeUrl)
-        ? doctorDesdeUrl
-        : citaPrevia ? String(citaPrevia.doctorId) : '';
+    const doctorInicial = parametros.get('profesional') ?? (citaPrevia ? String(citaPrevia.doctorId) : '');
 
     const [tipoConsulta, setTipoConsulta] = useState(citaPrevia?.tipoConsulta ?? '');
     const [doctorId, setDoctorId] = useState(doctorInicial);
