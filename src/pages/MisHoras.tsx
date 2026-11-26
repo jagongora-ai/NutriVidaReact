@@ -5,7 +5,8 @@ import CardCita from "../components/molecules/CardCita";
 import AlertDialog from "../components/molecules/AlertDialog";
 import BoletaElectronica from "../components/organisms/BoletaElectronica";
 import ObtenerCitas from "../validaciones/ObtenerCitas";
-import { ObtenerBoleta, type Boleta } from "../validaciones/PagarCita";
+import type { Boleta } from "../validaciones/PagarCita";
+import ObtenerBoleta from "../validaciones/ObtenerBoleta";
 import { ObtenerSesion } from "../validaciones/ValidarSesion";
 
 function MisHoras() {
@@ -31,7 +32,7 @@ function MisHoras() {
                     <p className="empty-state">No tienes horas próximas.</p>
                 ) : (
                     proximas.map((cita) => (
-                        <CardCita key={cita.id} cita={cita} vista="paciente" alVerBoleta={() => setBoleta(ObtenerBoleta(cita.id))} />
+                        <CardCita key={cita.id} cita={cita} vista="paciente" alVerBoleta={() => ObtenerBoleta(cita.id).then((b) => setBoleta(b))} />
                     ))
                 )}
             </section>
@@ -40,7 +41,7 @@ function MisHoras() {
                 <section className="lista-seccion">
                     <h2>Horas anteriores</h2>
                     {anteriores.map((cita) => (
-                        <CardCita key={cita.id} cita={cita} vista="paciente" alVerBoleta={() => setBoleta(ObtenerBoleta(cita.id))} />
+                        <CardCita key={cita.id} cita={cita} vista="paciente" alVerBoleta={() => ObtenerBoleta(cita.id).then((b) => setBoleta(b))} />
                     ))}
                 </section>
             )}
