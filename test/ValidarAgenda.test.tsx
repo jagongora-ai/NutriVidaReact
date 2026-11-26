@@ -1,11 +1,15 @@
 import { expect, test } from 'vitest'
-import { ValidarCitaMedica, DatosCitaMedica } from '../src/validaciones/ValidacionAgendar'
+import { ValidarCitaMedica, type DatosCitaMedica } from '../src/validaciones/ValidacionAgendar'
+
+const manana = new Date();
+manana.setDate(manana.getDate() + 1);
+const fechaFutura = `${manana.getFullYear()}-${String(manana.getMonth() + 1).padStart(2, '0')}-${String(manana.getDate()).padStart(2, '0')}`;
 
 const citaValida: DatosCitaMedica = {
     tipoConsulta: 'Consulta Nutricional',
     doctor: 'Nut. Carolina Fuentes M.',
-    fecha: '2026-11-15',
-    hora: '10:00',       
+    fecha: fechaFutura,
+    hora: '10:00',
 };
 
 test('Acepta una cita médica completamente válida', () => {

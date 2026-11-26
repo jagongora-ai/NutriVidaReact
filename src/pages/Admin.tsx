@@ -25,6 +25,12 @@ function Admin() {
             descripcion: "¡Administre el equipo de clinicaNutrivida!",
             textoBoton: "Gestionar",
             ruta: "/admin/gestion"
+        },
+        {
+            titulo: "Mensajes de contacto",
+            descripcion: "¡Responda las consultas de los pacientes!",
+            textoBoton: "Ver mensajes",
+            ruta: "/admin/mensajes"
         }
     ];
 

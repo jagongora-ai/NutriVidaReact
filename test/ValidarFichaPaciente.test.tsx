@@ -1,4 +1,3 @@
-// @vitest-environment jsdom
 import { expect, test } from 'vitest';
 import { validarFichaPaciente, type DatosFichaPaciente } from '../src/validaciones/ValidarFichaPaciente';
 

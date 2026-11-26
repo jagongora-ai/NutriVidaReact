@@ -671,3 +671,1063 @@ a {
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 }
+
+.booking-steps {
+  display: flex;
+  max-width: 480px;
+  margin: -1rem auto 2rem;
+  padding: 0;
+  list-style: none;
+  counter-reset: paso;
+}
+
+.booking-steps li {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: .4rem;
+  color: var(--muted);
+  font-size: .85rem;
+  font-weight: 600;
+  counter-increment: paso;
+}
+
+.booking-steps li::before {
+  content: counter(paso);
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 2px solid #b9d7e6;
+  border-radius: 50%;
+  background: #fff;
+  font-weight: 700;
+}
+
+.booking-steps li + li::after {
+  content: "";
+  position: absolute;
+  top: 16px;
+  right: 50%;
+  width: 100%;
+  height: 2px;
+  background: #b9d7e6;
+}
+
+.booking-steps li.current {
+  color: #193d4d;
+}
+
+.booking-steps li.current::before {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: #fff;
+}
+
+.booking-steps li.done::before {
+  content: "\2713";
+  border-color: #3a9b73;
+  background: #dff3ea;
+  color: #2f7d5c;
+}
+
+.booking-steps li.done + li::after {
+  background: var(--primary);
+}
+
+.booking-card {
+  width: 100%;
+  max-width: 720px;
+  overflow: hidden;
+  border: 1px solid rgba(75, 128, 148, .16);
+  border-radius: 16px;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+.booking-section {
+  padding: 1.75rem 2rem;
+  border-bottom: 1px solid #e9f0f3;
+}
+
+.booking-section h2 {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  margin: 0 0 1.25rem;
+  color: #254757;
+  font-family: Georgia, serif;
+  font-size: 1.3rem;
+}
+
+.booking-number {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--sky-soft);
+  color: #2d789c;
+  font-family: Arial, sans-serif;
+  font-size: .85rem;
+  font-weight: 700;
+}
+
+.booking-doctor,
+.appointment-doctor {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+}
+
+.booking-doctor {
+  margin: -.25rem 0 1.25rem;
+  padding: .75rem;
+  border-radius: 12px;
+  background: #f4f9fc;
+}
+
+.booking-doctor img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.booking-doctor strong,
+.appointment-doctor strong {
+  display: block;
+  color: #254757;
+}
+
+.booking-doctor span,
+.appointment-doctor span {
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+.booking-hint {
+  margin: 0 0 1rem;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.booking-patient {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: .75rem;
+  margin: 0 0 .9rem;
+}
+
+.booking-patient div {
+  padding: .75rem .9rem;
+  border-radius: 10px;
+  background: #f4f9fc;
+}
+
+.booking-patient dt {
+  color: var(--muted);
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.booking-patient dd {
+  margin: 0;
+  color: #193d4d;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.navbar-nav .nav-usuario {
+  color: #135b80;
+}
+
+.nav-salir {
+  border: 0;
+  background: none;
+}
+
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  gap: .5rem;
+}
+
+.time-slot {
+  padding: .5rem 0;
+  border: 1px solid #c5dde9;
+  border-radius: 8px;
+  background: #fff;
+  color: #2d5d74;
+  font-size: .9rem;
+  font-weight: 600;
+  transition: background .15s, border-color .15s;
+}
+
+.time-slot:hover:not(:disabled) {
+  border-color: var(--primary);
+  background: var(--sky-soft);
+}
+
+.time-slot.selected {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: #fff;
+}
+
+.time-slot:disabled {
+  border-style: dashed;
+  background: #f3f5f6;
+  color: #a9b4b9;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.booking-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: #f4f9fc;
+}
+
+.booking-total span {
+  display: block;
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.booking-total strong {
+  display: block;
+  color: #193d4d;
+  font-family: Georgia, serif;
+  font-size: 2rem;
+  line-height: 1.15;
+}
+
+.booking-total small {
+  color: var(--muted);
+}
+
+.booking-submit,
+.payment-submit {
+  padding: .75rem 1.75rem;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.payment-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  min-width: 0;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  border: 0;
+}
+
+.payment-methods legend {
+  width: 100%;
+  margin-bottom: .2rem;
+  font-size: 1rem;
+}
+
+.payment-method {
+  display: flex;
+  flex: 1;
+  min-width: 140px;
+  align-items: center;
+  gap: .55rem;
+  padding: .7rem .9rem;
+  border: 1.5px solid #c5dde9;
+  border-radius: 10px;
+  background: #fff;
+  color: #2d5d74;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+
+.payment-method input {
+  accent-color: var(--primary);
+}
+
+.payment-method.active {
+  border-color: var(--primary);
+  background: var(--sky-soft);
+  color: #193d4d;
+}
+
+.payment-method:focus-within {
+  box-shadow: 0 0 0 .2rem rgba(65, 135, 179, .2);
+}
+
+.payment-layout {
+  display: grid;
+  max-width: 1040px;
+  grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
+  align-items: start;
+  gap: 2rem;
+  margin: 0 auto;
+}
+
+.payment-label {
+  display: block;
+  margin-bottom: .5rem;
+  color: #4187a5;
+  font-size: .73rem;
+  font-weight: 700;
+  letter-spacing: .15em;
+}
+
+.appointment-card {
+  position: sticky;
+  top: 1.5rem;
+  padding: 1.75rem;
+  border: 1px solid rgba(75, 128, 148, .16);
+  border-radius: 16px;
+  background: linear-gradient(160deg, #fff 0%, #eef7fb 100%);
+  box-shadow: var(--shadow);
+}
+
+.appointment-doctor {
+  margin-bottom: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #e1edf2;
+}
+
+.appointment-doctor img {
+  width: 64px;
+  height: 64px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 3px 10px rgba(47, 91, 111, .15);
+  object-fit: cover;
+}
+
+.appointment-list {
+  margin: 0 0 1.25rem;
+}
+
+.appointment-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .55rem 0;
+  border-bottom: 1px dashed #d9e7ee;
+}
+
+.appointment-list dt {
+  color: var(--muted);
+  font-size: .9rem;
+  font-weight: 600;
+}
+
+.appointment-list dd {
+  margin: 0;
+  color: #254757;
+  font-weight: 600;
+  text-align: right;
+}
+
+.appointment-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  background: #193d4d;
+  color: #fff;
+}
+
+.appointment-total span {
+  font-size: .85rem;
+  opacity: .85;
+}
+
+.appointment-total strong {
+  font-family: Georgia, serif;
+  font-size: 1.8rem;
+}
+
+.appointment-edit {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: .9rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.payment-form-heading h2 {
+  margin-bottom: 1.25rem;
+}
+
+.payment-form fieldset {
+  min-width: 0;
+}
+
+.payment-note {
+  margin: .25rem 0 1.25rem;
+  padding: .7rem .9rem;
+  border-radius: 10px;
+  background: #f4f9fc;
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+.payment-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: .75rem;
+}
+
+.payment-actions .btn {
+  padding: .75rem 1.5rem;
+  border-radius: 10px;
+}
+
+.payment-empty {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem;
+  overflow-y: auto;
+  background: rgba(16, 38, 48, .55);
+  backdrop-filter: blur(3px);
+  animation: dialogo-aparecer .2s ease-out;
+}
+
+.dialog-box {
+  width: 100%;
+  max-width: 620px;
+  margin: auto;
+  border-radius: 18px;
+  background: var(--paper);
+  box-shadow: 0 24px 60px rgba(16, 38, 48, .35);
+  animation: dialogo-subir .25s ease-out;
+}
+
+.dialog-box:focus {
+  outline: none;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 1.75rem 1rem;
+}
+
+.dialog-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 50%;
+  background: #dff3ea;
+  color: #2f7d5c;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.dialog-header h2 {
+  margin: 0;
+  color: #193d4d;
+  font-family: Georgia, serif;
+  font-size: 1.4rem;
+}
+
+.dialog-header p {
+  margin: .2rem 0 0;
+  color: var(--muted);
+  font-size: .92rem;
+}
+
+.dialog-body {
+  padding: 0 1.75rem;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: .75rem;
+  padding: 1.25rem 1.75rem 1.5rem;
+}
+
+@keyframes dialogo-aparecer {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes dialogo-subir {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog-overlay,
+  .dialog-box {
+    animation: none;
+  }
+}
+
+.boleta {
+  padding: 1.5rem;
+  border: 1px solid #d9e7ee;
+  border-radius: 12px;
+  background: #fff;
+  font-size: .92rem;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.boleta-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #193d4d;
+}
+
+.boleta-emisor img {
+  width: 120px;
+  height: auto;
+  margin-bottom: .4rem;
+}
+
+.boleta-emisor p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .8rem;
+  line-height: 1.45;
+}
+
+.boleta-folio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .15rem;
+  padding: .6rem .9rem;
+  border: 2px solid #c0392b;
+  color: #c0392b;
+  font-size: .8rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.boleta-folio strong {
+  font-size: .9rem;
+  letter-spacing: .04em;
+}
+
+.boleta dl {
+  margin: 0;
+}
+
+.boleta dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .35rem 0;
+}
+
+.boleta dt {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.boleta dd {
+  margin: 0;
+  color: #254757;
+  font-weight: 600;
+  text-align: right;
+}
+
+.boleta-datos,
+.boleta-cita {
+  padding: .85rem 0;
+  border-bottom: 1px dashed #c5dde9;
+}
+
+.boleta-cita h3 {
+  margin: 0 0 .4rem;
+  color: #254757;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.boleta-montos {
+  padding-top: .85rem;
+}
+
+.boleta .boleta-total {
+  align-items: baseline;
+  margin-top: .4rem;
+  padding: .7rem .9rem;
+  border-radius: 10px;
+  background: #193d4d;
+}
+
+.boleta .boleta-total dt,
+.boleta .boleta-total dd {
+  color: #fff;
+}
+
+.boleta .boleta-total dd {
+  font-family: Georgia, serif;
+  font-size: 1.35rem;
+}
+
+.boleta-pie {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.boleta-pie p {
+  margin: 0 0 .35rem;
+  color: var(--muted);
+  font-size: .82rem;
+}
+
+.boleta-pie .boleta-aviso {
+  font-size: .75rem;
+  font-style: italic;
+}
+
+.price-title {
+  display: block;
+  margin: .25rem 0 .35rem;
+  color: #4187a5;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.price-list {
+  width: 100%;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.price-list li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .3rem 0;
+  border-bottom: 1px dashed #d9e7ee;
+  font-size: .85rem;
+}
+
+.price-list li:last-child {
+  border-bottom: 0;
+}
+
+.price-list span {
+  color: var(--muted);
+}
+
+.price-list small {
+  color: #8a9aa1;
+}
+
+.price-list strong {
+  color: #193d4d;
+  white-space: nowrap;
+}
+
+.profile-copy .price-list {
+  max-width: 460px;
+}
+
+.profile-copy .price-list li {
+  font-size: .95rem;
+}
+
+.login-registro {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: .92rem;
+  text-align: center;
+}
+
+.login-registro a {
+  font-weight: 700;
+}
+
+.contact-layout {
+  display: grid;
+  max-width: 1000px;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, 1fr);
+  align-items: start;
+  gap: 2rem;
+  margin: 0 auto;
+}
+
+.contact-form .btn {
+  width: 100%;
+  padding: .65rem;
+  font-weight: 700;
+}
+
+.contact-info {
+  padding: 1.75rem;
+  border-radius: 16px;
+  background: #193d4d;
+  color: #e7f2f7;
+}
+
+.contact-info h2 {
+  margin: 0 0 1rem;
+  color: #fff;
+  font-family: Georgia, serif;
+  font-size: 1.4rem;
+}
+
+.contact-info dl {
+  margin: 0 0 1rem;
+}
+
+.contact-info dl div {
+  padding: .6rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .15);
+}
+
+.contact-info dt {
+  color: #9fc9dd;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.contact-info dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.contact-info p {
+  margin: 0;
+  color: #cfe3ec;
+  font-size: .92rem;
+  line-height: 1.6;
+}
+
+.contact-info a {
+  color: #fff;
+  font-weight: 700;
+}
+
+.lista-acciones {
+  display: flex;
+  max-width: 1000px;
+  justify-content: flex-end;
+  margin: 0 auto;
+}
+
+.lista-seccion {
+  display: flex;
+  max-width: 1000px;
+  flex-direction: column;
+  gap: .9rem;
+  margin: 2.5rem auto 0;
+}
+
+.lista-seccion h2 {
+  margin: 0;
+  color: #193d4d;
+  font-family: Georgia, serif;
+  font-size: 1.4rem;
+}
+
+.lista-seccion .empty-state {
+  margin: 0;
+  padding: 2rem 1.5rem;
+}
+
+.cita-card,
+.mensaje-card {
+  border: 1px solid rgba(75, 128, 148, .14);
+  border-radius: 14px;
+  background: var(--paper);
+  box-shadow: 0 5px 20px rgba(47, 91, 111, .07);
+}
+
+.cita-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.1rem 1.25rem;
+}
+
+.cita-fecha {
+  display: flex;
+  width: 64px;
+  height: 64px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: var(--sky-soft);
+  color: #2d789c;
+}
+
+.cita-fecha strong {
+  font-family: Georgia, serif;
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.cita-fecha span {
+  font-size: .75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.cita-info h3 {
+  margin: 0 0 .25rem;
+  color: #193d4d;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.cita-info p {
+  margin: 0;
+  color: #254757;
+  font-weight: 600;
+}
+
+.cita-info .cita-detalle {
+  margin-top: .2rem;
+  color: var(--muted);
+  font-size: .88rem;
+  font-weight: 400;
+}
+
+.cita-acciones {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: .4rem;
+}
+
+.cita-acciones strong {
+  color: #193d4d;
+  font-family: Georgia, serif;
+  font-size: 1.15rem;
+}
+
+.cita-acciones .btn {
+  padding: .3rem .8rem;
+  font-size: .85rem;
+}
+
+.cita-estado {
+  padding: .15rem .6rem;
+  border-radius: 99px;
+  background: #dff3ea;
+  color: #2f7d5c;
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+.mensaje-card {
+  padding: 1.25rem 1.4rem;
+}
+
+.mensaje-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: .6rem;
+}
+
+.mensaje-header h3 {
+  margin: 0 0 .15rem;
+  color: #193d4d;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.mensaje-header span {
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+.mensaje-header .mensaje-estado {
+  flex-shrink: 0;
+  padding: .15rem .6rem;
+  border-radius: 99px;
+  background: #fdf1d8;
+  color: #8a5a00;
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+.mensaje-header .mensaje-estado.respondido {
+  background: #dff3ea;
+  color: #2f7d5c;
+}
+
+.mensaje-texto {
+  margin: 0;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.mensaje-respuesta {
+  margin-top: 1rem;
+  padding: .9rem 1rem;
+  border-left: 4px solid var(--primary);
+  border-radius: 8px;
+  background: #eef7fb;
+}
+
+.mensaje-respuesta strong {
+  display: block;
+  margin-bottom: .3rem;
+  color: #2d789c;
+  font-size: .85rem;
+}
+
+.mensaje-respuesta p {
+  margin: 0;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.mensaje-responder {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed #d9e7ee;
+}
+
+.mensaje-responder .btn {
+  padding: .45rem 1.1rem;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .boleta,
+  .boleta * {
+    visibility: visible;
+  }
+
+  .dialog-overlay {
+    position: absolute;
+    padding: 0;
+    background: none;
+    backdrop-filter: none;
+  }
+
+  .dialog-box {
+    box-shadow: none;
+  }
+
+  .boleta {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border: 0;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .payment-layout {
+    max-width: 620px;
+    grid-template-columns: 1fr;
+  }
+
+  .appointment-card {
+    position: static;
+  }
+
+  .contact-layout {
+    max-width: 640px;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .booking-section {
+    padding: 1.25rem;
+  }
+
+  .cita-card {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .cita-acciones {
+    flex-direction: row;
+    grid-column: 1 / -1;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .booking-footer {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.25rem;
+  }
+
+  .payment-actions,
+  .dialog-actions {
+    flex-direction: column-reverse;
+  }
+
+  .payment-actions .btn,
+  .dialog-actions .btn {
+    width: 100%;
+  }
+
+  .dialog-header,
+  .dialog-actions {
+    padding-inline: 1.1rem;
+  }
+
+  .dialog-body {
+    padding-inline: 1.1rem;
+  }
+
+  .boleta {
+    padding: 1rem;
+  }
+
+  .boleta-header {
+    flex-direction: column;
+  }
+
+  .boleta-folio {
+    align-self: stretch;
+  }
+}

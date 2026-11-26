@@ -10,7 +10,7 @@ function PanelMedico({ pacientes }: { pacientes: Patient[] }) {
                 descripcion="Bienvenido al sistema de gestión de pacientes. Selecciona una opción para continuar."
             />
             <div className="row g-4 justify-content-center">
-                <div className="col-12 col-md-6 col-lg-5">
+                <div className="col-12 col-md-6 col-lg-4">
                     <article className="home-card card h-100 border-0">
                         <div className="card-body d-flex flex-column p-4 text-center">
                             <h2 className="card-title mb-3">Nueva ficha médica</h2>
@@ -25,7 +25,7 @@ function PanelMedico({ pacientes }: { pacientes: Patient[] }) {
                         </div>
                     </article>
                 </div>
-                <div className="col-12 col-md-6 col-lg-5">
+                <div className="col-12 col-md-6 col-lg-4">
                     <article className="home-card card h-100 border-0">
                         <div className="card-body d-flex flex-column p-4 text-center">
                             <h2 className="card-title mb-3">Consulta de pacientes</h2>
@@ -36,6 +36,21 @@ function PanelMedico({ pacientes }: { pacientes: Patient[] }) {
                             <div className="mt-auto">
                                 <Link className="btn btn-primary w-100 py-2" to="/pacientes">
                                     Ver fichas de pacientes
+                                </Link>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <div className="col-12 col-md-6 col-lg-4">
+                    <article className="home-card card h-100 border-0">
+                        <div className="card-body d-flex flex-column p-4 text-center">
+                            <h2 className="card-title mb-3">Mi agenda</h2>
+                            <p className="card-text mb-4">
+                                Revisa las horas que tus pacientes agendaron y pagaron contigo.
+                            </p>
+                            <div className="mt-auto">
+                                <Link className="btn btn-primary w-100 py-2" to="/medico/agenda">
+                                    Ver mi agenda
                                 </Link>
                             </div>
                         </div>
