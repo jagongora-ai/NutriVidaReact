@@ -4,8 +4,8 @@ async function GuardarFicha(datos: object, id?: number): Promise<boolean> {
     const sesion = ObtenerSesion()
 
     const url = id
-        ? `http://localhost:8085/api/fichas/${id}`
-        : "http://localhost:8085/api/fichas"
+        ? `http://localhost:8080/api/fichas/${id}`
+        : "http://localhost:8080/api/fichas"
 
     try {
         const respuesta = await fetch(url, {

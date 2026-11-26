@@ -1,6 +1,6 @@
 import { render, screen, cleanup } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { test, expect, beforeEach, afterEach } from "vitest";
+import { test, expect, vi, beforeEach, afterEach } from "vitest";
 import App from "../src/App";
 import ValidarSesion from "../src/validaciones/ValidarSesion";
 
@@ -20,9 +20,13 @@ function abrirEn(ruta: string) {
 
 beforeEach(() => {
     localStorage.clear();
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => [] }));
 });
 
-afterEach(cleanup);
+afterEach(() => {
+    cleanup();
+    vi.unstubAllGlobals();
+});
 
 test("ValidarSesion es falso cuando no hay sesión iniciada", () => {
     expect(ValidarSesion("Cliente")).toBe(false);

@@ -5,7 +5,7 @@ async function ObtenerFichas(): Promise<Patient[]> {
 
     const sesion = ObtenerSesion()
     try {
-        const respuesta = await fetch("http://localhost:8085/api/fichas", {
+        const respuesta = await fetch("http://localhost:8080/api/fichas", {
             headers: {
                 "Authorization": "Bearer " + sesion.token,
             },

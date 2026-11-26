@@ -5,14 +5,18 @@ export interface Prestacion {
     duracion: string;
 }
 
-const prestacionesIniciales: Prestacion[] = [
-    { valor: "Consulta", etiqueta: "Consulta Nutricionista", precio: 22000, duracion: "45 min" },
-    { valor: "Plan especializado", etiqueta: "Plan especializado", precio: 35000, duracion: "60 min" },
-    { valor: "Evaluación", etiqueta: "Evaluación antropométrica", precio: 18000, duracion: "30 min" },
-    { valor: "Taller Grupal", etiqueta: "Taller Grupal", precio: 12000, duracion: "90 min" },
-]
+async function ObtenerPrestaciones(): Promise<Prestacion[]> {
 
-function ObtenerPrestaciones(): Prestacion[] {
-    return prestacionesIniciales
+    try {
+        const respuesta = await fetch("http://localhost:8080/api/prestaciones")
+
+        if (!respuesta.ok) {
+            return []
+        }
+        return await respuesta.json()
+    } catch (error) {
+        console.error("Error al cargar las prestaciones", error)
+        return []
+    }
 }
 export default ObtenerPrestaciones

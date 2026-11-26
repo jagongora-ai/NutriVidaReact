@@ -1,9 +1,8 @@
-import { render, screen, fireEvent, act, cleanup } from "@testing-library/react";
+import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { test, expect, vi, beforeEach, afterEach } from "vitest";
 import PagoSimulado from "../src/pages/PagoSimulado";
-import PagarCita from "../src/validaciones/PagarCita";
-import ObtenerCitas from "../src/validaciones/ObtenerCitas";
+import PagarCita, { type Boleta } from "../src/validaciones/PagarCita";
 import type { Cita } from "../src/validaciones/AgendarCita";
 
 const cita: Cita = {
@@ -22,30 +21,61 @@ const cita: Cita = {
     paciente: "Manuel Prueba",
     rut: "12345678-9",
     correo: "manuel@prueba.cl",
-    estado: "Pendiente",
+    estado: "PENDIENTE",
+};
+
+const boleta: Boleta = {
+    folio: 1,
+    citaId: 1,
+    emitidaEl: "2099-11-30T13:00:00Z",
+    codigoAutorizacion: "123456",
+    medioPago: "tarjeta de crédito VISA •••• 4242",
+    neto: 18487,
+    iva: 3513,
+    total: 22000,
+    cita: { ...cita, estado: "Pagada" },
 };
 
 beforeEach(() => {
     localStorage.clear();
     localStorage.setItem("usuarioSesion", JSON.stringify({
-        nombre: "Manuel Prueba", rut: "12345678-9", correo: "manuel@prueba.cl", rol: "Cliente",
+        nombre: "Manuel Prueba", rut: "12345678-9", correo: "manuel@prueba.cl", rol: "Cliente", token: "token-cliente",
     }));
-    vi.useFakeTimers();
 });
 
 afterEach(() => {
     cleanup();
-    vi.useRealTimers();
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
 });
 
-test("PagarCita separa el IVA, guarda la cita como pagada y emite la boleta", () => {
-    const boleta = PagarCita(cita, "tarjeta de crédito VISA •••• 4242");
+test("PagarCita envía la cita y el medio de pago a ms-pagos y devuelve la boleta", async () => {
+    localStorage.setItem("citaActual", JSON.stringify(cita));
+    const fetchFalso = vi.fn().mockResolvedValue({ ok: true, json: async () => boleta });
+    vi.stubGlobal("fetch", fetchFalso);
 
-    expect(boleta.neto).toBe(18487);
-    expect(boleta.iva).toBe(3513);
-    expect(boleta.total).toBe(22000);
-    expect(boleta.folio).toBe(1);
-    expect(ObtenerCitas()[0].estado).toBe("Pagada");
+    const resultado = await PagarCita(1, "tarjeta de crédito VISA •••• 4242");
+
+    expect(fetchFalso).toHaveBeenCalledWith("http://localhost:8080/api/pagos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer token-cliente" },
+        body: JSON.stringify({ citaId: 1, medioPago: "tarjeta de crédito VISA •••• 4242" }),
+    });
+    expect(resultado?.neto).toBe(18487);
+    expect(resultado?.iva).toBe(3513);
+    expect(resultado?.total).toBe(22000);
+    expect(localStorage.getItem("citaActual")).toBeNull();
+});
+
+test("Si la cita ya fue pagada se muestra el mensaje del backend y no hay boleta", async () => {
+    const alerta = vi.spyOn(window, "alert").mockImplementation(() => { });
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+        ok: false,
+        json: async () => ({ mensaje: "La cita ya tiene un pago registrado." }),
+    }));
+
+    expect(await PagarCita(1, "tarjeta de crédito VISA •••• 4242")).toBeNull();
+    expect(alerta).toHaveBeenCalledWith("La cita ya tiene un pago registrado.");
 });
 
 test("Sin hora agendada, la página de pago invita a agendar", () => {
@@ -59,8 +89,9 @@ test("Una cita agendada por otro usuario no se muestra para pagar", () => {
     expect(screen.getByText(/No tienes una hora pendiente de pago/i)).toBeDefined();
 });
 
-test("Al pagar se muestra la boleta y la hora queda guardada en la agenda", () => {
+test("Al pagar se muestra la boleta que entrega ms-pagos", async () => {
     localStorage.setItem("citaActual", JSON.stringify(cita));
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => boleta }));
     render(<BrowserRouter><PagoSimulado /></BrowserRouter>);
 
     fireEvent.change(screen.getByLabelText(/Nombre del titular/i), { target: { value: "Manuel Prueba" } });
@@ -69,16 +100,12 @@ test("Al pagar se muestra la boleta y la hora queda guardada en la agenda", () =
     fireEvent.change(screen.getByLabelText(/CVV/i), { target: { value: "123" } });
     fireEvent.click(screen.getByRole("button", { name: /Pagar/i }));
 
-    act(() => { vi.advanceTimersByTime(2000); });
-
-    const dialogo = screen.getByRole("alertdialog");
+    const dialogo = await screen.findByRole("alertdialog");
     expect(dialogo.textContent).toContain("BOLETA ELECTRÓNICA");
     expect(dialogo.textContent).toContain("Manuel Prueba");
     expect(dialogo.textContent).toContain("manuel@prueba.cl");
     expect(dialogo.textContent).toContain("10:30");
     expect(dialogo.textContent).toContain("$22.000");
     expect(dialogo.textContent).toContain("VISA •••• 4242");
-
     expect(localStorage.getItem("citaActual")).toBeNull();
-    expect(ObtenerCitas()).toHaveLength(1);
 });

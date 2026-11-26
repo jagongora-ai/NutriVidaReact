@@ -3,7 +3,7 @@ import { useEffect, useState, type ReactElement } from 'react';
 import Navbar from './components/organisms/Navbar';
 import NavbarAdministracion from './components/organisms/NavbarAdministracion';
 import PiePagina from './components/organisms/PiePagina';
-import Profesionales from './pages/Profesionales';
+import Profesionales, { type Professional } from './pages/Profesionales';
 import DetalleProfesional from './pages/DetalleProfesional';
 import Inicio from './pages/Inicio';
 import RegistroLogin from './pages/RegistroLogin';
@@ -22,6 +22,7 @@ import MisHoras from './pages/MisHoras';
 import AgendaMedico from './pages/AgendaMedico';
 import MensajesAdmin from './pages/MensajesAdmin';
 import ObtenerProfesionales from './validaciones/ObtenerProfesionales';
+import ObtenerPrestaciones, { type Prestacion } from './validaciones/ObtenerPrestaciones';
 import ValidarSesion from './validaciones/ValidarSesion';
 import ObtenerFichas from './validaciones/ObtenerFichas';
 
@@ -35,10 +36,16 @@ function App() {
     const ubicacion = useLocation();
     const esAdministrador = ubicacion.pathname.startsWith("/admin");
     const esMedico = ubicacion.pathname.startsWith("/medico");
-    const profesionales = ObtenerProfesionales();
+    const [profesionales, guardarProfesionales] = useState<Professional[]>([]);
+    const [prestaciones, guardarPrestaciones] = useState<Prestacion[]>([]);
 
     const [pacientes, guardarPacientes] = useState<Patient[]>([]);
     const esSesionDeMedico = ValidarSesion("medico")
+
+    useEffect(() => {
+        ObtenerProfesionales().then((lista) => guardarProfesionales(lista))
+        ObtenerPrestaciones().then((lista) => guardarPrestaciones(lista))
+    }, [])
 
     useEffect(() => {
 
@@ -76,13 +83,13 @@ function App() {
                     <Route path="/" element={<Inicio />} />
                     <Route path="/registro" element={<RegistroLogin />} />
                     <Route path="/inicioSesion" element={<InicioSesion />} />
-                    <Route path="/profesionales" element={<Profesionales profesionales={profesionales} />} />
-                    <Route path="/profesionales/:id" element={<DetalleProfesional profesionales={profesionales} />} />
+                    <Route path="/profesionales" element={<Profesionales profesionales={profesionales} prestaciones={prestaciones} />} />
+                    <Route path="/profesionales/:id" element={<DetalleProfesional profesionales={profesionales} prestaciones={prestaciones} />} />
                     <Route path="/novedades" element={<Novedades />} />
                     <Route path="/novedades/:id" element={<DetalleNovedad />} />
                     <Route path="/contacto" element={<Contacto />} />
 
-                    <Route path='/Agendar' element={proteger('Cliente', <Agendar />)} />
+                    <Route path='/Agendar' element={proteger('Cliente', <Agendar profesionales={profesionales} prestaciones={prestaciones} />)} />
                     <Route path="/pago" element={proteger('Cliente', <PagoSimulado />)} />
                     <Route path="/mis-horas" element={proteger('Cliente', <MisHoras />)} />
 
@@ -98,7 +105,7 @@ function App() {
                     <Route path="/medico/pacientes/:id" element={proteger('medico', <DetallePaciente pacientes={pacientes} />)} />
 
                     <Route path="/admin" element={proteger('admin', <Admin />)} />
-                    <Route path="/admin/gestion" element={proteger('admin', <GestionarMedicos />)} />
+                    <Route path="/admin/gestion" element={proteger('admin', <GestionarMedicos medicos={profesionales} guardarMedicos={guardarProfesionales} />)} />
                     <Route path="/admin/mensajes" element={proteger('admin', <MensajesAdmin />)} />
                     <Route path="/admin/cerrarSesion" element={<InicioSesion />} />
                 </Routes>

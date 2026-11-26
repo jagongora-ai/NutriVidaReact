@@ -28,24 +28,44 @@ export function ObtenerCitaPendiente(): Cita | null {
     return cita
 }
 
-function AgendarCita(cita: Cita): boolean {
-    const citas: Cita[] = JSON.parse(localStorage.getItem("citas") || "[]")
+async function AgendarCita(datos: object): Promise<boolean> {
+    const sesion = ObtenerSesion()
+    const citaPrevia = ObtenerCitaPendiente()
 
-    const horaTomada = citas.some((c) => c.doctorId === cita.doctorId && c.fecha === cita.fecha && c.hora === cita.hora)
-    if (horaTomada) {
-        alert("Esa hora ya fue tomada por otro paciente, por favor elige otra")
-        return false;
+    try {
+        if (citaPrevia) {
+            await fetch(`http://localhost:8080/api/citas/${citaPrevia.id}/cancelar`, {
+                method: "PATCH",
+                headers: {
+                    "Authorization": "Bearer " + sesion.token,
+                },
+            })
+            localStorage.removeItem("citaActual")
+        }
+
+        const respuesta = await fetch("http://localhost:8080/api/citas", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + sesion.token,
+            },
+            body: JSON.stringify(datos),
+        })
+
+        if (!respuesta.ok) {
+            const error = await respuesta.json()
+            alert(error.mensaje)
+            return false
+        }
+
+        const cita = await respuesta.json()
+        localStorage.setItem("citaActual", JSON.stringify(cita))
+        return true
+
+    } catch (error) {
+        console.error("Error al agendar la cita:", error)
+        alert("No se pudo conectar con el servidor. Intente nuevamente.")
+        return false
     }
-
-    const ahora = new Date()
-    const [horas, minutos] = cita.hora.split(":").map(Number)
-    const esHoy = cita.fecha === ahora.toLocaleDateString("sv-SE")
-    if (esHoy && horas * 60 + minutos <= ahora.getHours() * 60 + ahora.getMinutes()) {
-        alert("Esa hora ya pasó, por favor elige otra")
-        return false;
-    }
-
-    localStorage.setItem("citaActual", JSON.stringify(cita))
-    return true
 }
 export default AgendarCita

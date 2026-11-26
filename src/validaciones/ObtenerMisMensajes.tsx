@@ -5,7 +5,7 @@ async function ObtenerMisMensajes(): Promise<Mensaje[]> {
 
     const sesion = ObtenerSesion()
     try {
-        const respuesta = await fetch("http://localhost:8086/api/mensajes/mis/mensajes", {
+        const respuesta = await fetch("http://localhost:8080/api/mensajes/mis/mensajes", {
             headers: {
                 "Authorization": "Bearer " + sesion.token,
             },

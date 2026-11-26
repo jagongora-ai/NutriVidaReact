@@ -1,11 +1,12 @@
 import { Link, useParams } from 'react-router-dom';
 import TituloPagina from '../components/molecules/TituloPagina';
 import ListaPrestaciones from '../components/molecules/ListaPrestaciones';
-import ObtenerPrestaciones from '../validaciones/ObtenerPrestaciones';
+import type { Prestacion } from '../validaciones/ObtenerPrestaciones';
 import type { Professional } from './Profesionales';
 
-function DetalleProfesional({ profesionales }: {
+function DetalleProfesional({ profesionales, prestaciones }: {
   profesionales: Professional[]
+  prestaciones: Prestacion[]
 }) {
   const { id } = useParams();
   const profesional = profesionales.find((persona) => persona.id === Number(id));
@@ -38,7 +39,7 @@ function DetalleProfesional({ profesionales }: {
         <h4>Áreas de atención</h4>
         <div className="tag-list">{profesional.areas.map((area) => <span key={area}>{area}</span>)}</div>
         <h4>Prestaciones y valores</h4>
-        <ListaPrestaciones prestaciones={ObtenerPrestaciones()} conDuracion />
+        <ListaPrestaciones prestaciones={prestaciones} conDuracion />
         <div className="mt-4">
           <Link className="btn btn-primary" to={`/Agendar?profesional=${profesional.id}`}>
             Agendar hora con este profesional

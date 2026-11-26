@@ -2,7 +2,7 @@ import type { DatosRegistroLogin } from "./ValidarRegistroLogin";
 
 async function RegistrarUsuario(datos: DatosRegistroLogin): Promise<boolean> {
     try {
-        const respuesta = await fetch("http://localhost:8081/api/auth/registro", {
+        const respuesta = await fetch("http://localhost:8080/api/auth/registro", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
