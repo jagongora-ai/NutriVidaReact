@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import type { Professional } from '../../pages/Profesionales';
 import type { Prestacion } from '../../validaciones/ObtenerPrestaciones';
@@ -7,7 +7,7 @@ import Input from '../atoms/Input';
 import Precio from '../atoms/Precio';
 import { ValidarCitaMedica } from '../../validaciones/ValidacionAgendar';
 import AgendarCita, { ObtenerCitaPendiente } from '../../validaciones/AgendarCita';
-import ObtenerCitas from '../../validaciones/ObtenerCitas';
+import ObtenerHorasOcupadas from '../../validaciones/ObtenerHorasOcupadas';
 import { ObtenerSesion } from '../../validaciones/ValidarSesion';
 
 type formAgendarProps = {
@@ -62,12 +62,17 @@ function FormConsultaMedica({ profesionales, prestaciones }: formAgendarProps) {
     const [modalidad, setModalidad] = useState(citaPrevia?.modalidad ?? 'Presencial');
     const [fecha, setFecha] = useState(citaPrevia?.fecha ?? '');
     const [hora, setHora] = useState(citaPrevia?.hora ?? '');
+    const [ocupadas, setOcupadas] = useState<string[]>([]);
+    const [enviando, setEnviando] = useState(false);
 
     const prestacion = prestaciones.find((opcion) => opcion.valor === tipoConsulta);
     const profesional = profesionales.find((persona) => String(persona.id) === doctorId);
-    const ocupadas = profesional && fecha
-        ? ObtenerCitas().filter((c) => c.doctorId === profesional.id && c.fecha === fecha).map((c) => c.hora)
-        : [];
+
+    useEffect(() => {
+        if (doctorId && fecha) {
+            ObtenerHorasOcupadas(doctorId, fecha).then((horas) => setOcupadas(horas));
+        }
+    }, [doctorId, fecha]);
 
     function cambiarDoctor(valor: string) {
         setDoctorId(valor);
@@ -79,8 +84,9 @@ function FormConsultaMedica({ profesionales, prestaciones }: formAgendarProps) {
         setHora('');
     }
 
-    function enviar(evento: FormEvent<HTMLFormElement>) {
+    async function enviar(evento: FormEvent<HTMLFormElement>) {
         evento.preventDefault();
+        if (enviando) return;
 
         const error = ValidarCitaMedica({ tipoConsulta, doctor: doctorId, fecha, hora, modalidad });
         if (error !== '') {
@@ -88,26 +94,15 @@ function FormConsultaMedica({ profesionales, prestaciones }: formAgendarProps) {
             return;
         }
 
-        if (!prestacion || !profesional) return;
-
-        const agendada = AgendarCita({
-            id: Date.now(),
+        setEnviando(true);
+        const agendada = await AgendarCita({
             tipoConsulta,
-            prestacion: prestacion.etiqueta,
-            duracion: prestacion.duracion,
-            precio: prestacion.precio,
-            doctorId: profesional.id,
-            doctor: profesional.nombre,
-            especialidad: profesional.especialidad,
-            imagen: profesional.imagen,
+            doctorId: Number(doctorId),
             fecha,
             hora,
             modalidad,
-            paciente: usuario.nombre ?? '',
-            rut: usuario.rut ?? '',
-            correo: usuario.correo ?? '',
-            estado: 'Pendiente',
         });
+        setEnviando(false);
 
         if (agendada) {
             navegar('/pago');
@@ -209,8 +204,8 @@ function FormConsultaMedica({ profesionales, prestaciones }: formAgendarProps) {
                     <strong>{prestacion ? <Precio monto={prestacion.precio} /> : '—'}</strong>
                     {prestacion && <small>{prestacion.etiqueta} · {prestacion.duracion}</small>}
                 </div>
-                <button type="submit" className="btn btn-primary booking-submit">
-                    Continuar al pago
+                <button type="submit" className="btn btn-primary booking-submit" disabled={enviando}>
+                    {enviando ? 'Agendando...' : 'Continuar al pago'}
                 </button>
             </div>
         </form>
