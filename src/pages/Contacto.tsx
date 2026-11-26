@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TituloPagina from "../components/molecules/TituloPagina";
 import CardMensaje from "../components/molecules/CardMensaje";
 import FormularioContacto from "../components/organisms/FormularioContacto";
-import { ObtenerMensajes } from "../validaciones/GuardarMensaje";
-import ValidarSesion, { ObtenerSesion } from "../validaciones/ValidarSesion";
+import ValidarSesion from "../validaciones/ValidarSesion";
+import ObtenerMisMensajes from "../validaciones/ObtenerMisMensajes";
+import type { Mensaje } from "../validaciones/GuardarMensaje";
 
 function Contacto() {
-    const [mensajes, setMensajes] = useState(ObtenerMensajes);
-    const sesion = ObtenerSesion();
+    const [mensajes, setMensajes] = useState<Mensaje[]>([])
     const esPaciente = ValidarSesion("Cliente");
-    const misMensajes = mensajes.filter((m) => m.correo === sesion.correo?.toLowerCase());
+
+    useEffect(() => {
+        if (esPaciente) {
+            ObtenerMisMensajes().then((lista) => setMensajes(lista))
+        }
+    }, [esPaciente])
 
     return (
         <div className="container page-space">
@@ -20,7 +25,11 @@ function Contacto() {
             />
 
             <div className="contact-layout">
-                <FormularioContacto alEnviar={() => setMensajes(ObtenerMensajes())} />
+                <FormularioContacto alEnviar={() => {
+                    if (esPaciente) {
+                        ObtenerMisMensajes().then((lista) => setMensajes(lista))
+                    }
+                }} />
 
                 <aside className="contact-info">
                     <h2>Clínica NutriVida</h2>
@@ -42,10 +51,10 @@ function Contacto() {
             {esPaciente && (
                 <section className="lista-seccion">
                     <h2>Mis mensajes</h2>
-                    {misMensajes.length === 0 ? (
+                    {mensajes.length === 0 ? (
                         <p className="empty-state">Aún no has enviado mensajes.</p>
                     ) : (
-                        misMensajes.map((mensaje) => <CardMensaje key={mensaje.id} mensaje={mensaje} />)
+                        mensajes.map((mensaje) => <CardMensaje key={mensaje.id} mensaje={mensaje} />)
                     )}
                 </section>
             )}
