@@ -4,7 +4,7 @@ async function EliminarFicha(id: number): Promise<boolean> {
     const sesion = ObtenerSesion()
 
     try {
-        const respuesta = await fetch(`http://localhost:8085/api/fichas/${id}`, {
+        const respuesta = await fetch(`http://localhost:8080/api/fichas/${id}`, {
             method: "DELETE",
             headers: {
                 "Authorization": "Bearer " + sesion.token,

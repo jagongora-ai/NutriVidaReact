@@ -5,7 +5,7 @@ async function ObtenerCitas(): Promise<Cita[]> {
 
     const sesion = ObtenerSesion()
     try {
-        const respuesta = await fetch("http://localhost:8083/api/citas/mias", {
+        const respuesta = await fetch("http://localhost:8080/api/citas/mias", {
             headers: {
                 "Authorization": "Bearer " + sesion.token,
             },

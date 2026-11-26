@@ -9,7 +9,7 @@ async function EliminarMedico(id: number): Promise<boolean> {
 
     const sesion = ObtenerSesion()
     try {
-        const respuesta = await fetch(`http://localhost:8082/api/profesionales/${id}`, {
+        const respuesta = await fetch(`http://localhost:8080/api/profesionales/${id}`, {
             method: "DELETE",
             headers: {
                 "Authorization": "Bearer " + sesion.token,

@@ -5,7 +5,7 @@ async function ObtenerTodosLosMensajes(): Promise<Mensaje[]> {
 
     const sesion = ObtenerSesion()
     try {
-        const respuesta = await fetch("http://localhost:8086/api/mensajes", {
+        const respuesta = await fetch("http://localhost:8080/api/mensajes", {
             headers: {
                 "Authorization": "Bearer " + sesion.token,
             },

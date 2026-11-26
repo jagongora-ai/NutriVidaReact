@@ -60,7 +60,7 @@ test('AgendarCita envía la cita a ms-agendar y la deja pendiente de pago', asyn
     const datos = { tipoConsulta: 'Consulta', doctorId: 1, fecha: fechaFutura, hora: '10:00', modalidad: 'Presencial' };
     expect(await AgendarCita(datos)).toBe(true);
 
-    expect(fetchFalso).toHaveBeenCalledWith('http://localhost:8083/api/citas', expect.objectContaining({ method: 'POST', body: JSON.stringify(datos) }));
+    expect(fetchFalso).toHaveBeenCalledWith('http://localhost:8080/api/citas', expect.objectContaining({ method: 'POST', body: JSON.stringify(datos) }));
     expect(JSON.parse(localStorage.getItem('citaActual') || 'null')).toEqual(citaCreada);
 });
 

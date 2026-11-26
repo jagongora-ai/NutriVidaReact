@@ -11,7 +11,7 @@ async function ActualizarMedico(medicoEditado: Professional): Promise<boolean> {
 
     const sesion = ObtenerSesion()
     try {
-        const respuesta = await fetch(`http://localhost:8082/api/profesionales/${medicoEditado.id}`, {
+        const respuesta = await fetch(`http://localhost:8080/api/profesionales/${medicoEditado.id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

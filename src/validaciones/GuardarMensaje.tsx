@@ -21,7 +21,7 @@ async function GuardarMensaje(datos: DatosContacto): Promise<boolean> {
     }
 
     try {
-        const respuesta = await fetch("http://localhost:8086/api/mensajes", {
+        const respuesta = await fetch("http://localhost:8080/api/mensajes", {
             method: "POST",
             headers: encabezados
             ,

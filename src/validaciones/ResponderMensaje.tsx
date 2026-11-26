@@ -15,7 +15,7 @@ async function ResponderMensaje(id: number, respuesta: string): Promise<boolean>
     const sesion = ObtenerSesion()
 
     try {
-        const resultado = await fetch(`http://localhost:8086/api/mensajes/${id}/respuesta`, {
+        const resultado = await fetch(`http://localhost:8080/api/mensajes/${id}/respuesta`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

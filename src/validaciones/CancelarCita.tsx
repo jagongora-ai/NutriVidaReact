@@ -9,7 +9,7 @@ async function CancelarCita(id: number): Promise<boolean> {
 
     const sesion = ObtenerSesion()
     try {
-        const respuesta = await fetch(`http://localhost:8083/api/citas/${id}/cancelar`, {
+        const respuesta = await fetch(`http://localhost:8080/api/citas/${id}/cancelar`, {
             method: "PATCH",
             headers: {
                 "Authorization": "Bearer " + sesion.token,

@@ -46,7 +46,7 @@ test("Eliminar un medico envia DELETE a ms-profesionales con el token del admin"
     vi.stubGlobal("fetch", fetchFalso);
 
     expect(await EliminarMedico(3)).toBe(true);
-    expect(fetchFalso).toHaveBeenCalledWith("http://localhost:8082/api/profesionales/3", {
+    expect(fetchFalso).toHaveBeenCalledWith("http://localhost:8080/api/profesionales/3", {
         method: "DELETE",
         headers: { "Authorization": "Bearer token-admin" },
     });

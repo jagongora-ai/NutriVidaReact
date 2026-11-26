@@ -3,7 +3,7 @@ import type { Professional } from "../pages/Profesionales";
 async function ObtenerProfesionales(): Promise<Professional[]> {
 
     try {
-        const respuesta = await fetch("http://localhost:8082/api/profesionales")
+        const respuesta = await fetch("http://localhost:8080/api/profesionales")
 
         if (!respuesta.ok) {
             return []

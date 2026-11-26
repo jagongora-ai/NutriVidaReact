@@ -8,7 +8,7 @@ export interface Prestacion {
 async function ObtenerPrestaciones(): Promise<Prestacion[]> {
 
     try {
-        const respuesta = await fetch("http://localhost:8083/api/prestaciones")
+        const respuesta = await fetch("http://localhost:8080/api/prestaciones")
 
         if (!respuesta.ok) {
             return []

@@ -34,7 +34,7 @@ async function AgendarCita(datos: object): Promise<boolean> {
 
     try {
         if (citaPrevia) {
-            await fetch(`http://localhost:8083/api/citas/${citaPrevia.id}/cancelar`, {
+            await fetch(`http://localhost:8080/api/citas/${citaPrevia.id}/cancelar`, {
                 method: "PATCH",
                 headers: {
                     "Authorization": "Bearer " + sesion.token,
@@ -43,7 +43,7 @@ async function AgendarCita(datos: object): Promise<boolean> {
             localStorage.removeItem("citaActual")
         }
 
-        const respuesta = await fetch("http://localhost:8083/api/citas", {
+        const respuesta = await fetch("http://localhost:8080/api/citas", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

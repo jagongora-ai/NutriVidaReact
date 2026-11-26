@@ -4,7 +4,7 @@ async function ObtenerHorasOcupadas(doctorId: string, fecha: string): Promise<st
 
     const sesion = ObtenerSesion()
     try {
-        const respuesta = await fetch(`http://localhost:8083/api/citas/ocupadas?doctorId=${doctorId}&fecha=${fecha}`, {
+        const respuesta = await fetch(`http://localhost:8080/api/citas/ocupadas?doctorId=${doctorId}&fecha=${fecha}`, {
             headers: {
                 "Authorization": "Bearer " + sesion.token,
             },

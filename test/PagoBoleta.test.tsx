@@ -56,7 +56,7 @@ test("PagarCita envía la cita y el medio de pago a ms-pagos y devuelve la bolet
 
     const resultado = await PagarCita(1, "tarjeta de crédito VISA •••• 4242");
 
-    expect(fetchFalso).toHaveBeenCalledWith("http://localhost:8084/api/pagos", {
+    expect(fetchFalso).toHaveBeenCalledWith("http://localhost:8080/api/pagos", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": "Bearer token-cliente" },
         body: JSON.stringify({ citaId: 1, medioPago: "tarjeta de crédito VISA •••• 4242" }),

@@ -17,7 +17,7 @@ async function PagarCita(citaId: number, medioPago: string): Promise<Boleta | nu
     const sesion = ObtenerSesion()
 
     try {
-        const respuesta = await fetch("http://localhost:8084/api/pagos", {
+        const respuesta = await fetch("http://localhost:8080/api/pagos", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

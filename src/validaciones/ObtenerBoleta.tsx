@@ -5,7 +5,7 @@ async function ObtenerBoleta(citaId: number): Promise<Boleta | null> {
     const sesion = ObtenerSesion()
 
     try {
-        const respuesta = await fetch(`http://localhost:8084/api/boletas/cita/${citaId}`, {
+        const respuesta = await fetch(`http://localhost:8080/api/boletas/cita/${citaId}`, {
             headers: {
                 "Authorization": "Bearer " + sesion.token,
             },

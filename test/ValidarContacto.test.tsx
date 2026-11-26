@@ -48,7 +48,7 @@ test("El mensaje se envía al backend con POST", async () => {
 
     expect(resultado).toBe(true);
     expect(fetchFalso).toHaveBeenCalledWith(
-        "http://localhost:8086/api/mensajes",
+        "http://localhost:8080/api/mensajes",
         expect.objectContaining({ method: "POST" })
     );
     vi.unstubAllGlobals();
@@ -85,7 +85,7 @@ test("El administrador responde con PUT y el token", async () => {
 
     expect(resultado).toBe(true);
     const [url, opciones] = fetchFalso.mock.calls[0];
-    expect(url).toBe("http://localhost:8086/api/mensajes/7/respuesta");
+    expect(url).toBe("http://localhost:8080/api/mensajes/7/respuesta");
     expect(opciones.method).toBe("PUT");
     expect(opciones.headers.Authorization).toBe("Bearer tokenAdmin");
     vi.unstubAllGlobals();
