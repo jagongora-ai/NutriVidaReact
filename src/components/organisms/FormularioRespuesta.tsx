@@ -10,11 +10,19 @@ type formularioRespuestaProps = {
 
 function FormularioRespuesta({ mensajeId, alResponder }: formularioRespuestaProps) {
     const [respuesta, setRespuesta] = useState("")
+    const [enviando, setEnviando] = useState(false)
 
-    const responder = (e: FormEvent<HTMLFormElement>) => {
+    const responder = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        const respondido = ResponderMensaje(mensajeId, respuesta)
+        if (enviando) {
+            return;
+        }
+
+        setEnviando(true)
+        const respondido = await ResponderMensaje(mensajeId, respuesta)
+        setEnviando(false)
+
         if (respondido) {
             setRespuesta("")
             alResponder()
@@ -30,7 +38,10 @@ function FormularioRespuesta({ mensajeId, alResponder }: formularioRespuestaProp
                 valor={respuesta}
                 alCambiar={setRespuesta}
             />
-            <Boton nombre="Enviar respuesta" />
+            <Boton
+                nombre={enviando ? "Enviando..." : "Enviar respuesta"}
+                deshabilitado={enviando}
+            />
         </form>
     )
 }

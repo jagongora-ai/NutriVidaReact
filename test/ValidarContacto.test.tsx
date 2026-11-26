@@ -1,6 +1,6 @@
 import { test, expect, vi, beforeEach, afterEach } from "vitest";
 import ValidarContacto from "../src/validaciones/ValidarContacto";
-import GuardarMensaje, { ObtenerMensajes } from "../src/validaciones/GuardarMensaje";
+import GuardarMensaje from "../src/validaciones/GuardarMensaje";
 import ResponderMensaje from "../src/validaciones/ResponderMensaje";
 
 const datosValidos = {
@@ -66,16 +66,40 @@ test("Si hay sesión, el mensaje lleva el token", async () => {
     vi.unstubAllGlobals();
 });
 
-test("El administrador responde un mensaje pendiente", () => {
-    localStorage.setItem("mensajesContacto", JSON.stringify([
-        { id: 1, ...datosValidos, fecha: "2026-11-25T10:00:00", estado: "Pendiente", respuesta: "", fechaRespuesta: "" }
-    ]));
+test("La respuesta vacía se rechaza sin llamar al backend", async () => {
+    const fetchFalso = vi.fn();
+    vi.stubGlobal("fetch", fetchFalso);
 
-    expect(ResponderMensaje(1, "")).toBe(false);
-    expect(ResponderMensaje(1, "El plan especializado dura 60 minutos.")).toBe(true);
+    expect(await ResponderMensaje(1, "")).toBe(false);
+    expect(alertaEspia).toHaveBeenCalledWith("La respuesta es obligatoria");
+    expect(fetchFalso).not.toHaveBeenCalled();
+    vi.unstubAllGlobals();
+});
 
-    const [respondido] = ObtenerMensajes();
-    expect(respondido.estado).toBe("Respondido");
-    expect(respondido.respuesta).toBe("El plan especializado dura 60 minutos.");
+test("El administrador responde con PUT y el token", async () => {
+    localStorage.setItem("usuarioSesion", JSON.stringify({ token: "tokenAdmin" }));
+    const fetchFalso = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) });
+    vi.stubGlobal("fetch", fetchFalso);
+
+    const resultado = await ResponderMensaje(7, "El plan especializado dura 60 minutos.");
+
+    expect(resultado).toBe(true);
+    const [url, opciones] = fetchFalso.mock.calls[0];
+    expect(url).toBe("http://localhost:8086/api/mensajes/7/respuesta");
+    expect(opciones.method).toBe("PUT");
+    expect(opciones.headers.Authorization).toBe("Bearer tokenAdmin");
+    vi.unstubAllGlobals();
+});
+
+test("Si el mensaje ya fue respondido, muestra el mensaje del backend", async () => {
+    const fetchFalso = vi.fn().mockResolvedValue({
+        ok: false,
+        json: async () => ({ mensaje: "El mensaje ya fue respondido" }),
+    });
+    vi.stubGlobal("fetch", fetchFalso);
+
+    expect(await ResponderMensaje(7, "Segunda respuesta de prueba")).toBe(false);
+    expect(alertaEspia).toHaveBeenCalledWith("El mensaje ya fue respondido");
+    vi.unstubAllGlobals();
 });
 
